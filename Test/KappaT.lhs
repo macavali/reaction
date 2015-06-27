@@ -14,6 +14,7 @@ import Test.HUnit hiding (State)
 kappaTests :: Test
 kappaTests = "Kappa" ~: TestList [
   "Parser" ~: TestList testParseKappa
+  , "RuleQQ" ~: TestList testRuleQQ
   , "EnumState" ~: TestList testEnumState
   ]
 
@@ -35,50 +36,68 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
           , ("%var: v [max]([cos](u), [abs](-w))",
              [VarD "v" (Max (Cos (Var "u")) (Abs (Neg (Var "w"))))])
           , ("'my rule' A(x!2), B(y) -> B(y~0) @1",
-             [RuleD "my rule" Rule {
+             [RuleD Rule {
                  lhs = ([ AgentP "A" (fromList [("x", ((Linked "2"), Undefined))])
                         , AgentP "B" (fromList [("y", (Unbound, Undefined))])
                         ], []),
                  rhs = ([AgentP "B" (fromList [("y", (Unbound, (State "0")))])
                         ], []),
-                 rate = Lit 1.0
+                 rate = Lit 1.0,
+                 desc = pack "my rule"
              } ])
           , ("'bi rule' A(x!_) <-> B(y) @k1, 'k2'",
-             [ RuleD "bi rule" Rule {
+             [ RuleD Rule {
                   lhs = ([ AgentP "A" (fromList [("x", (Bound, Undefined))])], []),
                   rhs = ([ AgentP "B" (fromList [("y", (Unbound, Undefined))])], []),
-                  rate = Var "k1"
+                  rate = Var "k1",
+                  desc = pack "bi rule"
                   }
-             , RuleD "bi rule" Rule {
+             , RuleD Rule {
                   lhs = ([ AgentP "B" (fromList [("y", (Unbound, Undefined))])], []),
                   rhs = ([ AgentP "A" (fromList [("x", (Bound, Undefined))])], []),
-                  rate = Var "k2"
+                  rate = Var "k2",
+                  desc = pack "bi rule"
                   }
              ])
           , ("'hybrid rule' S(x!1~u),K(y!1) -> S(x~p),K(y) @k",
-             [ RuleD "hybrid rule" Rule {
+             [ RuleD Rule {
                   lhs = ([ AgentP "S" (fromList [("x", ((Linked "1"), (State "u")))])
                          , AgentP "K" (fromList [("y", ((Linked "1"), Undefined))])], []),
                   rhs = ([ AgentP "S" (fromList [("x", (Unbound, (State "p")))])
                          , AgentP "K" (fromList [("y", (Unbound, Undefined))])], []),
-                  rate = Var "k"
+                  rate = Var "k",
+                  desc = pack "hybrid rule"
                   }
              ])
           , ("'hybrid rule' S(x~u!1),K(y!1) | 0.1:atp -> S(x~p),K(y) | 0.1:adp @ 'k'",
-             [ RuleD "hybrid rule" Rule {
+             [ RuleD Rule {
                   lhs = ([ AgentP "S" (fromList [("x", ((Linked "1"), (State "u")))])
                          , AgentP "K" (fromList [("y", ((Linked "1"), Undefined))])
                          ], [Tok "atp" (Lit 0.1)]),
                   rhs = ([ AgentP "S" (fromList [("x", (Unbound, (State "p")))])
                          , AgentP "K" (fromList [("y", (Unbound, Undefined))])
                          ], [Tok "adp" (Lit 0.1)]),
-                  rate = Var "k"
+                  rate = Var "k",
+                  desc = pack "hybrid rule"
                   }
              ])
           ]
         parse s = case parseOnly kappaParser (pack s) of
           Right r  -> r
           Left err -> error $ err
+
+testRuleQQ :: [Test]
+testRuleQQ = [l ~=? s | (l,s) <- t]
+  where t = [ ([rule| 'homodimer' A(x), A(x) -> A(x!1), A(x!1) @1.0 |],
+               [ RuleD Rule {
+                  lhs = ([ AgentP "A" (fromList [("x", (Unbound, Undefined))])
+                         , AgentP "A" (fromList [("x", (Unbound, Undefined))])], []),
+                  rhs = ([ AgentP "A" (fromList [("x", (Linked "1", Undefined))])
+                         , AgentP "A" (fromList [("x", (Linked "1", Undefined))])], []),
+                  rate = Lit 1.0,
+                  desc = pack "homodimer"
+                 } ])
+            ]
 
 testEnumState :: [Test]
 testEnumState = [l ~=? s | (l,s) <- k]

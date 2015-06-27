@@ -21,7 +21,7 @@
 module Flow.Internal.KappaAST where
 import Language.Haskell.TH.Syntax
 import Data.List(intersperse)
-import Data.Text(Text, unpack)
+import Data.Text(Text, pack, unpack)
 import Data.HashMap.Lazy(HashMap, toList)
 \end{code}
 }
@@ -38,8 +38,15 @@ data TokE    = Tok Text Expr
 data Rule    = Rule { lhs  :: ([AgentP], [TokE])
                     , rhs  :: ([AgentP], [TokE])
                     , rate :: Expr
+                    , desc :: Text
                     }
              deriving (Show, Eq)
+
+defaultRule :: Rule
+defaultRule = Rule { lhs = undefined
+                   , rhs = undefined
+                   , rate = Lit 1.0
+                   , desc = pack "" }
 
 data Expr =
   Var Text |
@@ -65,7 +72,7 @@ data Statement =
   AgentD Text (HashMap Text [Text]) |
   VarD Text Expr |
   TokD Text |
-  RuleD Text Rule
+  RuleD Rule
   deriving Eq
 
 instance Show Statement where
@@ -81,10 +88,10 @@ instance Show Statement where
       itilde ss = intersperse (showString "~") ss
   showsPrec n (VarD name expr) =
     showString "VarD" . showString (unpack name) . showsPrec n expr
-  showsPrec _ (TokD name) = showString "TokD" . showString (unpack name)
-  showsPrec n (RuleD name rule) =
-    showString "RuleD " . showString (unpack name) .
-    showString " " . showsPrec n rule
+  showsPrec _ (TokD name) =
+    showString "TokD" . showString (unpack name)
+  showsPrec n (RuleD rule) =
+    showString "RuleD " . showString " " . showsPrec n rule
                                
 instance Show AgentP where
   showsPrec n (AgentP name states) =
@@ -146,6 +153,21 @@ tokN = ConE $ mkName "Flow.Kappa.Tok"
 siteN :: Exp
 siteN = ConE $ mkName "Flow.Kappa.Site"
 
+ruleN :: Name
+ruleN = mkName "Flow.Kappa.Rule"
+
+lhsN :: Name
+lhsN  = mkName "Flow.Kappa.lhs"
+
+rhsN :: Name
+rhsN  = mkName "Flow.Kappa.rhs"
+
+rateN :: Name
+rateN = mkName "Flow.Kappa.rate"
+
+descN :: Name
+descN = mkName "Flow.Kappa.desc"
+
 instance Lift AgentP where
   lift (AgentP name states) = do
     s <- mapM liftState (toList states)
@@ -177,13 +199,20 @@ instance Lift Statement where
     where
       liftSite (k, ss) =
         (TupE [liftText k, ListE (map liftText ss)])
-  lift (RuleD name rule) = do
+  lift (RuleD rule) = do
     s <- lift rule
-    return (AppE (AppE ruleDN (liftText name)) s)
+    return (AppE ruleDN s)
   lift _ = undefined
-  
+
 instance Lift Rule where
-  lift (Rule {lhs=lh, rhs=rh, rate=r}) = [| Rule { lhs=lh, rhs=rh, rate=r } |]
+  lift (Rule { lhs=lh, rhs=rh, rate=r, desc=d }) = do
+    llh <- lift lh
+    lrh <- lift rh
+    lr  <- lift r
+    return (RecConE ruleN [ (lhsN, llh)
+                          , (rhsN, lrh)
+                          , (rateN, lr)
+                          , (descN, liftText d) ])
 
 instance Lift TokE where
   lift (Tok name expr) = do

@@ -191,10 +191,10 @@ expr = e_bracket <|>
 -- | Parse a rule
 rule_dec :: Parser [Statement]
 rule_dec = do
-  desc <- qstr <|> tok
-  _    <- many1 space
-  r    <- pure_rule <|> bi_rule
-  return $ fmap (RuleD desc) r
+  d  <- qstr <|> tok
+  _  <- many1 space
+  rs <- pure_rule <|> bi_rule
+  return $ fmap RuleD $ map (\r -> r { desc = d }) rs
 
 -- | Parse a link pattern: ? | !n | !_ | empty
 link_pat :: Parser LinkP
@@ -264,7 +264,7 @@ pure_rule = do
   rt <- tok_exprs <|> return []
   _  <- many space >> char '@' >> many space
   k  <- expr
-  return [Rule { lhs = (l, lt), rhs = (r, rt), rate = k}]
+  return [ defaultRule { lhs = (l, lt), rhs = (r, rt), rate = k }]
 
 -- | Parse a bidirectional rule (<->)
 bi_rule :: Parser [Rule]
@@ -278,8 +278,8 @@ bi_rule = do
   kf <- expr
   _ <- many space >> char ',' >> many space
   kr <- expr
-  return [ Rule { lhs = (l, lt), rhs = (r, rt), rate = kf}
-         , Rule { lhs = (r, rt), rhs = (l, lt), rate = kr}
+  return [ defaultRule { lhs = (l, lt), rhs = (r, rt), rate = kf }
+         , defaultRule { lhs = (r, rt), rhs = (l, lt), rate = kr }
          ]
 
 -- | A statement is a declaration of some sort or a rule
