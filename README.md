@@ -11,6 +11,12 @@
 ```
 % cabal install --only-dependencies
 ```
+ * Check that everything is working properly
+```
+% cabal test
+...
+1 of 1 test suites (1 of 1 test cases) passed.
+```
  * Investigate things in the REPL. For example,
 ```
 % cabal repl
