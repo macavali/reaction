@@ -1,0 +1,37 @@
+\ProvidesPackage{literate}
+\RequirePackage{minted}
+\RequirePackage{xcolor}
+%\usemintedstyle{murphy}
+\newcommand{\corresponds}{\quad\leftrightarrow\quad}
+\definecolor{listingbg}{rgb}{0.95,0.95,0.95}
+\newminted[code]{haskell}{
+  frame=lines,
+  fontsize=\small,
+  framesep=0.5\baselineskip
+}
+\newminted[hcode]{haskell}{
+  frame=none
+}
+\newmintinline[icode]{haskell}{}
+\newmintedfile[cmakefile]{text}{
+  frame=single,
+  fontsize=\small,
+  framesep=0.5\baselineskip
+}
+\newminted[shell]{sh}{
+  frame=single,
+  fontsize=\small,
+  framesep=0.5\baselineskip
+}
+\newcommand{\shellinline}[1]{\texttt{\small{#1}}}
+\newmintedfile[shellfile]{sh}{
+  frame=single,
+  fontsize=\small,
+  framesep=0.5\baselineskip
+}
+\newminted[cmd]{shell-session}{
+  frame=single,
+  fontsize=\small,
+  framesep=0.5\baselineskip
+}
+\newcommand{\hide}[1]{}

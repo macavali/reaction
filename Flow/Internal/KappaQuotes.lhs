@@ -64,7 +64,7 @@ complex = QuasiQuoter {
 
 rule :: QuasiQuoter
 rule = QuasiQuoter {
-  quoteExp = \s -> case parseOnly (strip rule_dec) (pack s) of
+  quoteExp = \s -> case parseOnly (strip rule_pat) (pack s) of
                     Left err -> error err
                     Right q -> lift q
   , quotePat = undefined

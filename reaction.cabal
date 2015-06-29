@@ -12,6 +12,8 @@ synopsis:            Data structures for chemical reactions
 -- A longer description of the package.
 -- description:         
 
+extra-source-files: Tests.hs README.md doc/reaction.tex
+
 -- URL for the project homepage or repository.
 homepage:            http://tardis.ed.ac.uk/~wwaites/reaction/
 license:             GPL-3

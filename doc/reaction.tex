@@ -1,0 +1,23 @@
+\documentclass{amsart}
+\usepackage{literate}
+\usepackage{caption}
+\usepackage{subcaption}
+\title{Materialising Kappa Rules}
+\begin{document}
+\maketitle
+
+Kappa is a language that combines pattern matching and rewriting
+rules to describe the evolution of complex systems. It is related to,
+but more general than, Petri nets or reaction networks and is
+typically used to model biological systems. It consistes of
+\emph{agents}, analogous to species or reagents and \emph{rules},
+analogous to reactions that are said to occur at a particular
+rate.
+
+\input{../Flow/Internal/KappaAST.lhs}
+\input{../Flow/Kappa.lhs}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -73,9 +73,9 @@ agent_dec :: Parser [Statement]
 agent_dec = do
   _ <- (string $ pack "%agent:") >> many space
   agent <- agent_sig
-  return [agent]
+  return [AD agent]
 
-agent_sig :: Parser Statement
+agent_sig :: Parser AgentD
 agent_sig = do
   name  <- tok
   _     <- char '('
@@ -101,7 +101,7 @@ tok_dec = do
   _    <- string $ pack "%token:"
   _    <- many space
   name <- qtok
-  return [TokD name]
+  return [TD $ TokD name]
 
 -- | Parse a variable declaration
 var_dec :: Parser [Statement]
@@ -110,7 +110,7 @@ var_dec = do
   n <- qtok
   _ <- many space
   v <- expr
-  return [VarD n v]
+  return [VD $ VarD n v]
 
 e_var :: Parser Expr
 e_var = do
@@ -189,12 +189,17 @@ expr = e_bracket <|>
        
        
 -- | Parse a rule
-rule_dec :: Parser [Statement]
-rule_dec = do
+rule_pat :: Parser [Rule]
+rule_pat = do
   d  <- qstr <|> tok
   _  <- many1 space
   rs <- pure_rule <|> bi_rule
-  return $ fmap RuleD $ map (\r -> r { desc = d }) rs
+  return $ map (\r -> r { desc = d }) rs
+
+rule_dec :: Parser [Statement]
+rule_dec = do
+  rs <- rule_pat
+  return $ fmap RD rs
 
 -- | Parse a link pattern: ? | !n | !_ | empty
 link_pat :: Parser LinkP
