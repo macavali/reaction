@@ -33,6 +33,7 @@ library
     Flow.Internal.KappaAST
     Flow.Internal.KappaParser
     Flow.Internal.KappaQuotes
+    Flow.Internal.KappaUtil
     Flow.Internal.ReactionQuotes
 
   -- Other library packages from which modules are imported.

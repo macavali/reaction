@@ -174,8 +174,17 @@ site $s$ of agent $a$. In code this corresponds to
 data AgentD = AgentD Text (HashMap Text [Text])
             deriving (Eq)
 \end{code}
-where again we use a hash table to look up sites.
-
+where again we use a hash table to look up sites and provide an
+instance of \icode{Ord} almost identical to that for
+\icode{AgentP}.
+\hide{
+\begin{code}
+instance Ord AgentD where
+  compare (AgentD name1 sites1) (AgentD name2 sites2) =
+    compare (name1, toSortedList sites1) (name2, toSortedList sites2)
+    where toSortedList = sort . toList
+\end{code}
+}
 
 \subsection{Rules}
 

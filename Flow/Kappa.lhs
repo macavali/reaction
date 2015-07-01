@@ -22,11 +22,13 @@ module Flow.Kappa (
   , agent
   , complex
   , rule
-  , site, site', sites
-  , state, state'
-  , fillSites
-  , enumState, enumState', enumStates
-  , declare
+  , site, sites
+  , state
+  , decmap
+  , norma
+  , checka
+  , consistent
+  , deriveDec
   , Statement(..)
   , AgentD(..)
   , VarD(..)
@@ -43,35 +45,67 @@ module Flow.Kappa (
 import Prelude hiding (lookup)
 import Flow.Internal.KappaParser(kappaParser)
 import Flow.Internal.KappaQuotes(agent, complex, rule)
+import Flow.Internal.KappaUtil(site, sites, state)
 import Flow.Internal.KappaAST
 import qualified Data.HashMap.Lazy as H
 import qualified Data.List as L
-import Data.Text(Text, pack)
+import Data.Text(Text)
 \end{code}
 }
 
 \begin{code}
-site :: Text -> AgentP -> Maybe (LinkP, StateP)
-site x (AgentP _ sp) = H.lookup x sp
+type DecMap = H.HashMap Text AgentD
 
-site' :: String -> AgentP -> Maybe (LinkP, StateP)
-site' x = site (pack x)
+-- | make a "compiled" map of agent name -> declaration.
+decmap :: [AgentD] -> DecMap
+decmap ds = H.fromList [ (n, a) | a@(AgentD n _) <- ds ]
 
-sites :: AgentP -> [Text]
-sites (AgentP _ sp) = H.keys sp
+-- | normalise an agent pattern according to the
+-- | appropriate declarations.
+norma :: DecMap -> AgentP -> AgentP
+norma dmap a@(AgentP name ss) =
+  case H.lookup name dmap of
+   Nothing              -> a
+   Just (AgentD _ decs) -> AgentP name allsites
+     where
+       defdec []         = Undefined
+       defdec (sstate:_) = State sstate
+       merge (_, s) (l, Undefined) = (l, s)
+       merge _      (l,s)          = (l, s)
+       defaults = H.map (\dec -> (MaybeBound, defdec dec)) decs
+       allsites = H.unionWith merge defaults ss
 
-state :: Text -> AgentP -> Maybe StateP
-state x a = case site x a of
-  Nothing -> Nothing
-  Just (_, s) -> Just s
+checka :: DecMap -> AgentP -> Maybe [(Text, Maybe Bool)]
+checka dmap (AgentP an ss) =
+  fmap checkSites $ H.lookup an dmap
+  where
+    checkSites (AgentD _ decs) = map (checkSite decs) (H.toList ss)
+    checkSite decs (sn, (_, Undefined))  =
+      (sn, fmap (\_ -> True) (H.lookup sn decs))
+    checkSite decs (sn, (_, State s)) =
+      (sn, fmap (\t -> elem s t) (H.lookup sn decs))
 
-state' :: String -> AgentP -> Maybe StateP
-state' x = state (pack x)
+consistent :: DecMap -> AgentP -> Bool
+consistent dmap a =
+  case (fmap checkall . checka dmap) a of
+   -- No declaration for this agent
+   Nothing           -> False
+   -- No declaration for a site
+   Just Nothing      -> False
+   -- There is a site with an invalid state
+   Just (Just False) -> False
+   -- All sites are valid
+   Just (Just True)  -> True
+  where
+    checkall = fmap (foldl (&&) True) . mapM (\(_, c) -> c)
+\end{code}
 
+\hide{
+\begin{code}
 -- | Derive agent declarations from a list of agent patterns
 -- | as would be found in rules.
-declare :: [AgentP] -> [AgentD]
-declare agents =
+deriveDec :: [AgentP] -> [AgentD]
+deriveDec agents =
   -- create a list (name, site, state) observed from the list of agents
   let aa = [ (name, s, state s a) | a@(AgentP name _) <- agents, s <- sites a ]
   -- separate into a list of lists by agent, and make a declaration for each
@@ -98,46 +132,8 @@ declare agents =
     -- predicate for filtering out explicit states
     justState (Just _) = True
     justState _        = False
-
-sitesD :: AgentD -> [Text]
-sitesD (AgentD _ sp) = H.keys sp
-
-statesD :: Text -> AgentD -> [Text]
-statesD x (AgentD _ s) =
-  case H.lookup x s of
-   Just st -> st
-   Nothing -> []
-
-fillSites :: AgentD -> AgentP -> AgentP
-fillSites (AgentD _ sd) (AgentP name sp) = AgentP name allsites
-  where
-    defaults = H.map (\_ -> (MaybeBound, Undefined)) sd
-    allsites = H.unionWith (\l _ -> l) sp defaults
-
-enumState :: Text -> AgentD -> AgentP -> [AgentP]
-enumState x dec a@(AgentP name sp) =
-  case state x a of
-   Just Undefined -> genStates
-   Just _         -> [a] -- state already defined
-   Nothing        -> genStates
-  where
-    genStates =
-      case statesD x dec of
-       [] -> [a]
-       is -> [AgentP name (H.insertWith link x (MaybeBound, State s) sp) |
-              s <- is]
-    link (_, s) (l, _) = (l, s)
-
-enumState' :: String -> AgentD -> AgentP -> [AgentP]
-enumState' x = enumState (pack x)
-
-enumStates :: AgentD -> AgentP -> [AgentP]
-enumStates dec a = enumStates' [a] (sitesD dec)
-  where
-    enumStates' aa [] = aa
-    enumStates' aa (x:rest) =
-      enumStates' (concat (map (enumState x dec) aa)) rest
 \end{code}
+}
 
 % Local Variables:
 % compile-command: "cd ..; cabal build && cabal test"
