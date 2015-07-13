@@ -67,7 +67,7 @@ and neither, either or both may be specified. Furthermore a link
 state can be said to be bound to something specific, or bound
 to anything. These data type declarations,
 \begin{code}
-data LinkP   = Bound | Unbound | MaybeBound | Linked Text
+data LinkP   = Bound | Unbound | MaybeBound | Link Text
              deriving (Eq, Ord)
 data StateP  = State Text | Undefined
              deriving (Eq, Ord)
@@ -81,7 +81,7 @@ shown in Figure~\ref{fig:corrstate}.
       \texttt{x} &$\corresponds$& \icode{Unbound}\\
       \texttt{x!\_} &$\corresponds$& \icode{Bound}\\
       \texttt{x?} &$\corresponds$& \icode{MaybeBound}\\
-      \texttt{x!1} &$\corresponds$& \icode{Linked "1"}
+      \texttt{x!1} &$\corresponds$& \icode{Link "1"}
     \end{tabular}
     \caption{Link states.}
     \label{fig:corrlinkstate}
@@ -116,7 +116,7 @@ are given in Figure~\ref{fig:exampleexpr}.
 \begin{hcode}
 AgentP "A" (fromList [
     ("x", (Bound, Undefined)),
-    ("y", (Linked "2", State "1"))
+    ("y", (Link "2", State "1"))
 ])
 \end{hcode}
 \end{minipage}\\
@@ -261,7 +261,7 @@ instance Show LinkP where
   showsPrec _ Bound = showString "!_"
   showsPrec _ MaybeBound = showString "?"
   showsPrec _ Unbound = \s -> s
-  showsPrec _ (Linked l) = showString "!" . showString (unpack l)
+  showsPrec _ (Link l) = showString "!" . showString (unpack l)
 
 instance Show StateP where
   showsPrec _ Undefined  = \s -> s
@@ -292,7 +292,7 @@ ruleDN :: Exp
 ruleDN = ConE $ mkName "Flow.Kappa.RD"
 
 linkedN :: Exp
-linkedN = ConE $ mkName "Flow.Kappa.Linked"
+linkedN = ConE $ mkName "Flow.Kappa.Link"
 
 stateN :: Exp
 stateN = ConE $ mkName "Flow.Kappa.State"
@@ -341,7 +341,7 @@ instance Lift LinkP where
   lift Bound      = [| Bound |]
   lift Unbound    = [| Unbound |]
   lift MaybeBound = [| MaybeBound |]
-  lift (Linked s) = return (AppE linkedN (liftText s))
+  lift (Link s) = return (AppE linkedN (liftText s))
 
 instance Lift StateP where
   lift (State s) = return (AppE stateN (liftText s))

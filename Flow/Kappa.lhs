@@ -23,11 +23,13 @@ module Flow.Kappa (
   , complex
   , rule
   , site, sites
+  , links
   , state
   , decmap
   , norma
   , checka
   , consistent
+  , collect
   , deriveDec
   , Statement(..)
   , AgentD(..)
@@ -45,7 +47,7 @@ module Flow.Kappa (
 import Prelude hiding (lookup)
 import Flow.Internal.KappaParser(kappaParser)
 import Flow.Internal.KappaQuotes(agent, complex, rule)
-import Flow.Internal.KappaUtil(site, sites, state)
+import Flow.Internal.KappaUtil(site, sites, state, links)
 import Flow.Internal.KappaAST
 import qualified Data.HashMap.Lazy as H
 import qualified Data.List as L
@@ -98,6 +100,19 @@ consistent dmap a =
    Just (Just True)  -> True
   where
     checkall = fmap (foldl (&&) True) . mapM (\(_, c) -> c)
+
+collect :: [AgentP] -> [[AgentP]]
+collect []     = []
+collect (c:cs) =
+  (withE:(collect withoutE))
+  where hasLink e = L.elem e . links
+        sharesLink c c1 = any (\e -> hasLink e c1) (links c)
+        (withE, withoutE) = L.partition (sharesLink c) (c:cs)
+        
+-- splitL l (hasL, notL) a =
+--   if L.elem l $ links a
+--   then (hasL ++ [a], notL)
+--   else (hasL, notL ++ [a])
 \end{code}
 
 \hide{

@@ -207,7 +207,7 @@ link_pat = bound <|> linked <|> mbound <|> unbound
   where linked = do
           _ <- char '!'
           l <- stok
-          return $ Linked l
+          return $ Link l
         bound = string (pack "!_") >> (return Bound)
         mbound = char '?' >> (return MaybeBound)
         unbound = return Unbound

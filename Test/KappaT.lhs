@@ -21,6 +21,7 @@ kappaTests = "Kappa" ~: TestList [
   , "NormAgent" ~: TestList testNormAgent
   , "CheckAgent" ~: TestList testCheckAgent
   , "Consistency" ~: TestList testConsistency
+  , "Links" ~: TestList testLinks
   ]
 
 testParseKappa :: [Test]
@@ -42,7 +43,7 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
              [VD $ VarD "v" (Max (Cos (Var "u")) (Abs (Neg (Var "w"))))])
           , ("'my rule' A(x!2), B(y) -> B(y~0) @1",
              [RD Rule {
-                 lhs = ([ AgentP "A" (H.fromList [("x", ((Linked "2"), Undefined))])
+                 lhs = ([ AgentP "A" (H.fromList [("x", ((Link "2"), Undefined))])
                         , AgentP "B" (H.fromList [("y", (Unbound, Undefined))])
                         ], []),
                  rhs = ([AgentP "B" (H.fromList [("y", (Unbound, (State "0")))])
@@ -66,8 +67,8 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
              ])
           , ("'hybrid rule' S(x!1~u),K(y!1) -> S(x~p),K(y) @k",
              [ RD Rule {
-                  lhs = ([ AgentP "S" (H.fromList [("x", ((Linked "1"), (State "u")))])
-                         , AgentP "K" (H.fromList [("y", ((Linked "1"), Undefined))])], []),
+                  lhs = ([ AgentP "S" (H.fromList [("x", ((Link "1"), (State "u")))])
+                         , AgentP "K" (H.fromList [("y", ((Link "1"), Undefined))])], []),
                   rhs = ([ AgentP "S" (H.fromList [("x", (Unbound, (State "p")))])
                          , AgentP "K" (H.fromList [("y", (Unbound, Undefined))])], []),
                   rate = Var "k",
@@ -76,8 +77,8 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
              ])
           , ("'hybrid rule' S(x~u!1),K(y!1) | 0.1:atp -> S(x~p),K(y) | 0.1:adp @ 'k'",
              [ RD Rule {
-                  lhs = ([ AgentP "S" (H.fromList [("x", ((Linked "1"), (State "u")))])
-                         , AgentP "K" (H.fromList [("y", ((Linked "1"), Undefined))])
+                  lhs = ([ AgentP "S" (H.fromList [("x", ((Link "1"), (State "u")))])
+                         , AgentP "K" (H.fromList [("y", ((Link "1"), Undefined))])
                          ], [Tok "atp" (Lit 0.1)]),
                   rhs = ([ AgentP "S" (H.fromList [("x", (Unbound, (State "p")))])
                          , AgentP "K" (H.fromList [("y", (Unbound, Undefined))])
@@ -97,8 +98,8 @@ testRuleQQ = [l ~=? s | (l,s) <- t]
                [ Rule {
                   lhs = ([ AgentP "A" (H.fromList [("x", (Unbound, Undefined))])
                          , AgentP "A" (H.fromList [("x", (Unbound, Undefined))])], []),
-                  rhs = ([ AgentP "A" (H.fromList [("x", (Linked "1", Undefined))])
-                         , AgentP "A" (H.fromList [("x", (Linked "1", Undefined))])], []),
+                  rhs = ([ AgentP "A" (H.fromList [("x", (Link "1", Undefined))])
+                         , AgentP "A" (H.fromList [("x", (Link "1", Undefined))])], []),
                   rate = Lit 1.0,
                   desc = pack "homodimer"
                  } ])
@@ -154,6 +155,14 @@ testConsistency = [
   where
     chk = consistent decs . head
     decs = decmap [[agent| A(x~0~1,y) |]]
+
+testLinks :: [Test]
+testLinks = [
+  f [complex| A(x!1), B(x!1) |] ~=? ["1"]
+  , f [complex| A(x), B(x!1), C(y!2), D(x!2,y!1) |] ~=? ["1", "2"]
+  , collect [complex| A(x!1), B(y!1) |] ~=? [[complex|  A(x!1), B(y!1) |]]
+  ]
+  where f = L.nub . concat . map links 
 \end{code}
 %% Local Variables:
 %% compile-command: "cd ..; cabal build && cabal test"

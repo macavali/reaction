@@ -33,6 +33,14 @@ state :: Text -> AgentP -> Maybe StateP
 state x a = case site x a of
   Nothing -> Nothing
   Just (_, s) -> Just s
+
+links :: AgentP -> [Text]
+links (AgentP _ ss) = map edge $ filter attached $ H.elems ss
+  where
+    attached (Link _, _) = True
+    attached _           = False
+    edge (Link l, _)     = l
+    edge _               = undefined
 \end{code}
 }
 % Local Variables:
