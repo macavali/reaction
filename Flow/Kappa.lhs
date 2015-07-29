@@ -106,9 +106,14 @@ collect []     = []
 collect (c:cs) =
   (withE:(collect withoutE))
   where hasLink e = L.elem e . links
-        sharesLink c c1 = any (\e -> hasLink e c1) (links c)
+        sharesLink c1 c2 = any (\e -> hasLink e c2) (links c1)
         (withE, withoutE) = L.partition (sharesLink c) (c:cs)
-        
+
+match :: [AgentP] -> [AgentP] -> Bool
+match [] [] = True
+match [] _  = False
+match _  [] = False
+
 -- splitL l (hasL, notL) a =
 --   if L.elem l $ links a
 --   then (hasL ++ [a], notL)
@@ -151,5 +156,5 @@ deriveDec agents =
 }
 
 % Local Variables:
-% compile-command: "cd ..; cabal build && cabal test"
+% compile-command: "cd ..; cabal build; cabal test"
 % End:

@@ -33,6 +33,7 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
                                    , ("z", [])
                                    ])
              ])
+          , ("%agent: A()", [AD $ AgentD "A" (H.fromList [])])
           , ("%token: atp\n%token: adp",
              [TD $ TokD "atp", TD $ TokD "adp"])
           , ("%var: 'V' 1\n%var: V 2e3",
@@ -41,6 +42,8 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
              [VD $ VarD "v" (Exp (Neg (Var "u")))])
           , ("%var: v [max]([cos](u), [abs](-w))",
              [VD $ VarD "v" (Max (Cos (Var "u")) (Abs (Neg (Var "w"))))])
+          , ("%var: 'k11' 'k10'*6",
+             [VD $ VarD "k11" (Times (Var "k10") (Lit 6.0))])
           , ("'my rule' A(x!2), B(y) -> B(y~0) @1",
              [RD Rule {
                  lhs = ([ AgentP "A" (H.fromList [("x", ((Link "2"), Undefined))])
@@ -51,17 +54,17 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
                  rate = Lit 1.0,
                  desc = pack "my rule"
              } ])
-          , ("'bi rule' A(x!_) <-> B(y) @k1, 'k2'",
+          , ("'bi rule' A(x!_) <-> B(y) @k_1, 'k_2'",
              [ RD Rule {
                   lhs = ([ AgentP "A" (H.fromList [("x", (Bound, Undefined))])], []),
                   rhs = ([ AgentP "B" (H.fromList [("y", (Unbound, Undefined))])], []),
-                  rate = Var "k1",
+                  rate = Var "k_1",
                   desc = pack "bi rule"
                   }
              , RD Rule {
                   lhs = ([ AgentP "B" (H.fromList [("y", (Unbound, Undefined))])], []),
                   rhs = ([ AgentP "A" (H.fromList [("x", (Bound, Undefined))])], []),
-                  rate = Var "k2",
+                  rate = Var "k_2",
                   desc = pack "bi rule"
                   }
              ])
@@ -161,9 +164,21 @@ testLinks = [
   f [complex| A(x!1), B(x!1) |] ~=? ["1"]
   , f [complex| A(x), B(x!1), C(y!2), D(x!2,y!1) |] ~=? ["1", "2"]
   , collect [complex| A(x!1), B(y!1) |] ~=? [[complex|  A(x!1), B(y!1) |]]
+  , collect [complex| A(x!1), B(y!1), C(z!2) |] ~=?
+    [ [complex| A(x!1), B(y!1) |]
+    , [complex| C(z!2) |]
+    ]
+  , collect [complex| A(x!1), B(y!2), C(z!1) |] ~=?
+    [ [complex| A(x!1), C(z!1) |]
+    , [complex| B(y!2) |]
+    ]
+  , collect [complex| A(x!1), B(y!2), C(z!1), D(u!2) |] ~=?
+    [ [complex| A(x!1), C(z!1) |]
+    , [complex| B(y!2), D(u!2) |]
+    ]
   ]
   where f = L.nub . concat . map links 
 \end{code}
 %% Local Variables:
-%% compile-command: "cd ..; cabal build && cabal test"
+%% compile-command: "cd ..; cabal build; cabal test"
 %% End:

@@ -21,7 +21,7 @@ module Flow.Internal.KappaParser where
 
 import Prelude hiding (takeWhile)
 
-import Control.Applicative ((<|>), many)
+import Control.Applicative ((<|>), (<$>), many)
 import Data.Attoparsec.Text
 import Data.HashMap.Lazy(fromList)
 import Data.Text(Text, pack, cons)
@@ -34,7 +34,7 @@ import Flow.Internal.KappaAST
 tok :: Parser Text
 tok = do
   first <- satisfy $ inClass "A-Za-z"
-  rest  <- takeWhile (inClass "A-Za-z0-9_-+")
+  rest  <- takeWhile (inClass "A-Za-z0-9_+-")
   return $ cons first rest
 
 -- | Utility parser -- parse a single-quoted token/name
@@ -48,7 +48,7 @@ qtok = quoted <|> tok
 
 -- | Utility parser -- parse a state token
 stok :: Parser Text
-stok = takeWhile (inClass "A-Za-z0-9_-+")
+stok = takeWhile (inClass "A-Za-z0-9_+-")
 
 -- | Utility parser -- parse a single-quoted string
 qstr :: Parser Text
@@ -151,41 +151,47 @@ e_binop m s = do
   _ <- many space >> char ')'
   return $ m e1 e2
 
-e_infix :: (Expr -> Expr -> Expr) -> String -> Parser Expr
+e_infix :: (Expr -> Expr -> Expr) -> String -> Parser (Expr -> Expr -> Expr, Expr)
 e_infix m s = do
-  e1 <- expr
   _ <- many space >> string (pack s) >> many space
   e2 <- expr
-  return $ m e1 e2
+  return (m, e2)
 
-e_minus :: Parser Expr
+e_minus :: Parser (Expr -> Expr -> Expr, Expr)
 e_minus = do
-  e1 <- expr
   _ <- many space >> char '-' >> many space
   e2 <- expr
-  return $ Plus e1 (Neg e2)
+  return (Plus, (Neg e2))
   
 -- | Parse an algebraic expression
 expr :: Parser Expr
-expr = e_bracket <|>
-       e_var <|>
-       e_lit <|>
-       e_neg <|>
-       e_op Abs "[abs]" <|>
-       e_op Floor "[int]" <|>
-       e_op Exp "[exp]" <|>
-       e_op Cos "[cos]" <|>
-       e_op Sin "[sin]" <|>
-       e_op Tan "[tan]" <|>
-       e_op Log "[log]" <|>
-       e_binop Min "[min]" <|>
-       e_binop Max "[max]"
-       -- e_infix Plus "+" <|>
-       -- e_minus <|>
-       -- e_infix Times "*" <|>
-       -- e_infix Pow "^" <|>
-       -- e_infix Div "/" <|>
-       -- e_infix Mod "[mod]" <|>
+expr = do
+  e1 <- e_bracket <|>
+        e_var <|>
+        e_lit <|>
+        e_neg <|>
+        e_op Abs "[abs]" <|>
+        e_op Floor "[int]" <|>
+        e_op Exp "[exp]" <|>
+        e_op Cos "[cos]" <|>
+        e_op Sin "[sin]" <|>
+        e_op Tan "[tan]" <|>
+        e_op Log "[log]" <|>
+        e_binop Min "[min]" <|>
+        e_binop Max "[max]"
+  inf <- (Right <$> expr_infix) <|> (Left <$> return ())
+  case inf of
+   Right (m, e2) -> return $ m e1 e2
+   Left  _       -> return e1
+
+expr_infix :: Parser (Expr -> Expr -> Expr, Expr)
+expr_infix =
+  e_infix Plus "+" <|>
+  e_minus <|>
+  e_infix Times "*" <|>
+  e_infix Pow "^" <|>
+  e_infix Div "/" <|>
+  e_infix Mod "[mod]"
        
        
 -- | Parse a rule
@@ -296,6 +302,7 @@ kappaParser :: Parser [Statement]
 kappaParser = do
   _  <- many eol
   rs <- statement `sepBy` many eol
+  _  <- many eol
   _  <- endOfInput
   return (concat rs)
 
@@ -303,9 +310,9 @@ kappaParser = do
 kappaTest :: String -> IO ()
 kappaTest s = case parseOnly kappaParser (pack s) of
   Right r  -> print r
-  Left err -> error $ err
+  Left err -> error err
 \end{code}
 
 % Local Variables:
-% compile-command: "cd ../..; cabal build && cabal test"
+% compile-command: "cd ../..; cabal build; cabal test"
 % End:
