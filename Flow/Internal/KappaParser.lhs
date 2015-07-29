@@ -293,9 +293,27 @@ bi_rule = do
          , defaultRule { lhs = (r, rt), rhs = (l, lt), rate = kr }
          ]
 
+-- | Parse an observation declaration
+obs_dec :: Parser [Statement]
+obs_dec = do
+  _ <- (string $ pack "%obs:") >> many space
+  n <- qtok
+  _ <- many space
+  a <- agent_pat
+  return [OB $ Obs n a]
+
+-- | Initialisation
+init_dec :: Parser [Statement]
+init_dec = do
+  _ <- (string $ pack "%init:") >> many space
+  n <- double
+  _ <- many space
+  a <- agent_pat
+  return [IN $ Init n a]
+  
 -- | A statement is a declaration of some sort or a rule
 statement :: Parser [Statement]
-statement =  agent_dec <|> var_dec <|> tok_dec <|> rule_dec
+statement =  agent_dec <|> var_dec <|> tok_dec <|> rule_dec <|> obs_dec <|> init_dec
 
 -- | Parse a list of statements, stripping out comments and blank lines
 kappaParser :: Parser [Statement]

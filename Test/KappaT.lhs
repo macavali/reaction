@@ -90,6 +90,12 @@ testParseKappa = map (\(s,l) -> l ~=? parse s) $ k
                   desc = pack "hybrid rule"
                   }
              ])
+          , ("%obs: 'FreeProm'  A(s1,s2)",
+             [ OB $ Obs "FreeProm" (AgentP "A" (H.fromList [("s1", (Unbound, Undefined))
+                                                           , ("s2", (Unbound, Undefined))]))
+             ])
+          , ("%init: 500 KinA()",
+             [ IN $ Init 500.0 (AgentP "KinA" (H.fromList [])) ])
           ]
         parse s = case parseOnly kappaParser (pack s) of
           Right r  -> r

@@ -42,6 +42,8 @@ module Flow.Kappa (
   , StateP(..)
   , TokE(..)
   , Expr(..)
+  , Obs(..)
+  , Init(..)
   ) where
 
 import Prelude hiding (lookup)
