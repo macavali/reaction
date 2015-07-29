@@ -240,19 +240,19 @@ instance Show AgentD where
   showsPrec _ (AgentD name sites) =
     showString (unpack name) . showString "(" . sitesp . showString ")"
     where
-      sitesp = foldl1 (.) $
+      sitesp = foldl (.) (showString "") $
                intersperse (showString ",") (map (showSite) (toList sites))
       showSite (sn, []) = showString (unpack sn)
       showSite (sn, ss) =
         showString (unpack sn) . showString "~" .
-        (foldl1 (.) $ itilde (map (showString . unpack ) ss))
+        (foldl (.) (showString "") $ itilde (map (showString . unpack ) ss))
       itilde ss = intersperse (showString "~") ss
 
 instance Show AgentP where
   showsPrec n (AgentP name states) =
     showString (unpack name) . showString "(" . statesp . showString ")"
     where
-      statesp = foldl1 (.) $ icomma (map showState (toList states))
+      statesp = foldl (.) (showString "") $ icomma (map showState (toList states))
       showState (sn, (l, s)) =
         showString (unpack sn) . showsPrec n l . showsPrec n s
       icomma ss = intersperse (showString ",") ss
