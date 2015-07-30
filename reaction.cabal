@@ -27,10 +27,11 @@ cabal-version:       >=1.16
 library
   ghc-options: -Wall
   -- Modules exported by the library.
-  other-extensions: QuasiQuotes ParallelListComp
+  other-extensions: QuasiQuotes ParallelListComp NamedFieldPuns
   exposed-modules:     
     Flow.Kappa
     Flow.Kappa.Rdf
+    Flow.Kappa.Vocabulary
     Flow.Reaction
   other-modules:       
     Flow.Internal.KappaAST
@@ -44,6 +45,7 @@ library
                        attoparsec,
                        containers,
                        multiset,
+                       network-uri,
                        swish,
                        template-haskell,
                        text,
@@ -58,6 +60,7 @@ executable krdf
                        attoparsec,
                        containers,
                        multiset,
+                       network-uri,
                        optparse-applicative,
                        swish,
                        template-haskell,
