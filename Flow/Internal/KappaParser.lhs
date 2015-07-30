@@ -61,7 +61,7 @@ qstr = do
 comment :: Parser ()
 comment = do
   _ <- char '#'
-  _ <- manyTill anyChar endOfLine
+  _ <- endOfLine <|> (notChar '^' >> manyTill anyChar endOfLine >> return ())
   return ()
 
 -- | Utility parser -- eat up until end of line
@@ -310,10 +310,17 @@ init_dec = do
   _ <- many space
   a <- agent_pat
   return [IN $ Init n a]
-  
+
+-- | Parse an RDF line
+rdf_line :: Parser [Statement]
+rdf_line = do
+  _   <- (string $ pack "#^ ")
+  rdf <- takeWhile (\c -> c /= '\n')
+  return [RDF rdf]
+
 -- | A statement is a declaration of some sort or a rule
 statement :: Parser [Statement]
-statement =  agent_dec <|> var_dec <|> tok_dec <|> rule_dec <|> obs_dec <|> init_dec
+statement =  rdf_line <|> agent_dec <|> var_dec <|> tok_dec <|> rule_dec <|> obs_dec <|> init_dec
 
 -- | Parse a list of statements, stripping out comments and blank lines
 kappaParser :: Parser [Statement]

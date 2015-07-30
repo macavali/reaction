@@ -235,7 +235,7 @@ data TokD = TokD Text deriving (Show, Eq, Ord)
 data Obs  = Obs Text AgentP deriving (Show, Eq, Ord)
 data Init = Init Double AgentP deriving (Show, Eq, Ord)
 data Statement =
-  AD AgentD | VD VarD | TD TokD | RD Rule | OB Obs | IN Init
+  AD AgentD | VD VarD | TD TokD | RD Rule | OB Obs | IN Init | RDF Text
   deriving (Show, Eq)
 
 instance Show AgentD where
@@ -406,5 +406,5 @@ instance Lift Expr where
 }
 
 % Local Variables:
-% compile-command: "cd ../..; cabal build && cabal test"
+% compile-command: "cd ../..; cabal build; cabal test"
 % End:

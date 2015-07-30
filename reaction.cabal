@@ -30,7 +30,7 @@ library
   other-extensions: QuasiQuotes ParallelListComp
   exposed-modules:     
     Flow.Kappa
---    Flow.Kappa.Rdf
+    Flow.Kappa.Rdf
     Flow.Reaction
   other-modules:       
     Flow.Internal.KappaAST
@@ -44,6 +44,7 @@ library
                        attoparsec,
                        containers,
                        multiset,
+                       swish,
                        template-haskell,
                        text,
                        unordered-containers
