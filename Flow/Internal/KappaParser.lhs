@@ -324,11 +324,11 @@ kappaParser = do
   _  <- endOfInput
   return (concat rs)
 
--- | Test of the parser to print out the AST
-kappaTest :: String -> IO ()
-kappaTest s = case parseOnly kappaParser (pack s) of
-  Right r  -> print r
-  Left err -> error err
+parseKappa :: Text -> [Statement]
+parseKappa text =
+  case parseOnly kappaParser text of
+   Right r  -> r
+   Left err -> error err
 \end{code}
 
 % Local Variables:
