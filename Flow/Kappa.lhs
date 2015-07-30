@@ -19,6 +19,7 @@
 -}
 module Flow.Kappa (
   kappaParser
+  , parseKappa
   , agent
   , complex
   , rule
@@ -47,7 +48,7 @@ module Flow.Kappa (
   ) where
 
 import Prelude hiding (lookup)
-import Flow.Internal.KappaParser(kappaParser)
+import Flow.Internal.KappaParser(kappaParser, parseKappa)
 import Flow.Internal.KappaQuotes(agent, complex, rule)
 import Flow.Internal.KappaUtil(site, sites, state, links)
 import Flow.Internal.KappaAST
