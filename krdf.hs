@@ -2,8 +2,12 @@ module Main where
 
 import Options.Applicative
 import Prelude hiding(readFile)
-import Data.Text.IO(readFile)
+import Data.Text(unpack)
+import Data.Text.IO(readFile, hPutStr)
 import Flow.Kappa
+import Flow.Kappa.Rdf
+import System.IO(stdout)
+import Swish.RDF.Formatter.Turtle(formatGraphAsText)
 
 data Config = Cfg { filename :: String
                   , namespace :: String
@@ -22,7 +26,8 @@ args = Cfg
 exec :: Config -> IO ()
 exec (Cfg { filename }) = do
   s <- readFile filename
-  foldl (>>) (putStr "") $ map (putStrLn . show) (parseKappa s)
+  hPutStr stdout $ formatGraphAsText $ annotations $ parseKappa s
+--  foldl (>>) (putStr "") $ map (putStrLn . show) (annotations $ parseKappa s)
        
 main :: IO ()
 main = do

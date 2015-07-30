@@ -59,6 +59,7 @@ executable krdf
                        containers,
                        multiset,
                        optparse-applicative,
+                       swish,
                        template-haskell,
                        text,
                        unordered-containers
