@@ -47,6 +47,8 @@ materialise (RD rule:rest) g = materialise rest (ruleToRDF rule g)
 materialise (_:rest) g = materialise rest g
 
 -- | Produce RDF statements about a rule, and add them to the graph
+-- | TODO: we should also materialise the rate expression, but for
+-- |       now just leave a dangling blank node...
 ruleToRDF :: Rule -> RDFGraph -> RDFGraph
 ruleToRDF Rule { desc, lhs, rhs } g = rhsg
   where
