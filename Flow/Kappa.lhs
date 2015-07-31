@@ -32,6 +32,7 @@ module Flow.Kappa (
   , consistent
   , collect
   , deriveDec
+  , normalise
   , Statement(..)
   , AgentD(..)
   , VarD(..)
@@ -80,6 +81,26 @@ norma dmap a@(AgentP name ss) =
        defaults = H.map (\dec -> (MaybeBound, defdec dec)) decs
        allsites = H.unionWith merge defaults ss
 
+-- | Normalisa a collection of statements. This means filtering
+-- | out agent declarations and constructing a `DecMap` and then
+-- | going through each of the agent patterns in the lhs/rhs of
+-- | each of the rules and expanding them using `norma`
+normalise :: [Statement] -> [Statement]
+normalise statements = norm statements
+  where
+    dm = decmap $ map dec $ filter isDec statements
+    dec (AD d)   = d
+    dec _        = undefined
+    isDec (AD _) = True
+    isDec _      = False
+    norm []        = []
+    norm (RD r:ss)  = (normRule r:norm ss)
+    norm (s:ss)    = (s:norm ss)
+    normRule r = RD $ r { lhs = (map (norma dm) lagents, ltoks)
+                        , rhs = (map (norma dm) ragents, rtoks) }
+      where (lagents, ltoks) = lhs r
+            (ragents, rtoks) = rhs r
+    
 checka :: DecMap -> AgentP -> Maybe [(Text, Maybe Bool)]
 checka dmap (AgentP an ss) =
   fmap checkSites $ H.lookup an dmap
@@ -112,11 +133,12 @@ collect (c:cs) =
         sharesLink c1 c2 = any (\e -> hasLink e c2) (links c1)
         (withE, withoutE) = L.partition (sharesLink c) (c:cs)
 
+{- TODO
 match :: [AgentP] -> [AgentP] -> Bool
 match [] [] = True
 match [] _  = False
 match _  [] = False
-
+-}
 -- splitL l (hasL, notL) a =
 --   if L.elem l $ links a
 --   then (hasL ++ [a], notL)

@@ -20,7 +20,7 @@ args = Cfg
 exec :: Config -> IO ()
 exec (Cfg { filename }) = do
   input <- readFile filename
-  statements <- return $ parseKappa input
+  statements <- return $ normalise $ parseKappa input
   annotationGraph <- return $ annotations statements
   materialisedGraph <- return $ materialise statements annotationGraph
   hPutStr stdout $ formatGraphAsText materialisedGraph
