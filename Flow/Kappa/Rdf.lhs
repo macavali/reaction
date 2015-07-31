@@ -15,7 +15,6 @@ import Data.Text(Text, concat, append, pack, unpack)
 import Data.Text.Lazy(fromStrict)
 import Flow.Kappa(Statement(..), Rule(..), AgentP(..), SiteP, LinkP(..), StateP(..))
 import Flow.Kappa.Vocabulary
-import Network.URI(URI)
 import qualified Swish.RDF as RDF
 import Swish.Namespace(makeScopedName)
 import Swish.QName(newLName)
@@ -23,8 +22,8 @@ import Swish.RDF.Graph(RDFGraph, RDFLabel(..), ToRDFLabel(..), arc, addArc, name
 import Swish.RDF.Parser.Turtle(parseTurtlefromText)
 \end{code}
 }
-\begin{code}
 
+\begin{code}
 -- | Extract the explicit RDF/turtle annotations from a list of statements
 turtle :: [Statement] -> Text
 turtle = concat . map onlyText . filter isRdf
@@ -41,31 +40,11 @@ annotations statements =
    Left err -> error err
    Right g  -> g
 
+-- | Materialise information latent in the Kappa representation into RDF
 materialise :: [Statement] -> RDFGraph -> RDFGraph
 materialise [] g = g
 materialise (RD rule:rest) g = materialise rest (ruleToRDF rule g)
 materialise (_:rest) g = materialise rest g
-
-lname :: RDFGraph -> Text -> RDFLabel
-lname g n = Res $ makeScopedName Nothing (base g) name
-  where 
-    name = case newLName n of
-      Just ln -> ln
-      Nothing -> error $ "Local name '" ++ (unpack n) ++ "' is not valid"
-
-base :: RDFGraph -> URI
-base g = case M.lookup Nothing $ namespaces g of
-  Just u  -> u
-  Nothing -> error "The empty prefix (:) is not declared in the source graph"
-
-newBnode :: RDFGraph -> String -> RDFLabel
-newBnode g n = newNode (Blank n) existing
-  where
-    existing = S.toList $ RDF.allLabels RDF.isBlank g
-
--- | version of addArc suited to fold
-raddArc :: RDF.Label lb => RDF.NSGraph lb -> RDF.Arc lb -> RDF.NSGraph lb
-raddArc t a = addArc a t
 
 -- | Produce RDF statements about a rule, and add them to the graph
 ruleToRDF :: Rule -> RDFGraph -> RDFGraph
@@ -89,13 +68,16 @@ ruleToRDF Rule { desc, lhs, rhs } g = rhsg
     lhsg      = agentPats alhs brule nlhs ruleg
     rhsg      = agentPats arhs brule nrhs lhsg
 
-
+-- | Simple tail-recursive utility to iterate through agent patterns
 agentPats :: [AgentP] -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 agentPats (ap:as) b a g = agentPatToRDF ap b a nextg
   where nextg = agentPats as b a g
 agentPats []      _ _ g = g
 
 -- | Produce RDF statements about an agent pattern
+-- | The arguments are, the agent itself, a base blank node
+-- | from which bindings are to be generated, the anchor
+-- | referring to the rule's right/left side, and the graph.
 agentPatToRDF :: AgentP -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 agentPatToRDF (AgentP name sites) b anchor g = siteg
   where
@@ -107,11 +89,15 @@ agentPatToRDF (AgentP name sites) b anchor g = siteg
     ag      = foldl raddArc g triples
     siteg   = sitePats (H.toList sites) b npat ag
 
+-- | Simple tail-recursive utility to iterate through site patterns
 sitePats :: [(Text, SiteP)] -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 sitePats (s:ss) b a g = sitePatToRDF s b a nextg
   where nextg = sitePats ss b a g
 sitePats []     _ _ g = g
 
+-- | Produce RDF statements about a site patern
+-- | The arguments are similar to `agentPatToRDF` although in
+-- | this case, the anchor refers to the agent pattern.
 sitePatToRDF :: (Text, SiteP) -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
   where
@@ -119,7 +105,12 @@ sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
     -- bound state
     linkState (Link l) =
       [ arc nstate (Res rbmoBoundP) (Blank $ b ++ "_" ++ unpack l) ]
-    linkState _ = []
+    linkState Bound =
+      [ arc nstate (Res rbmoBoundP) (newBnode g "binding") ]
+    linkState Unbound =
+      [ arc nstate (Res rbmoBoundP) (Res rbmoNothing) ]
+    linkState MaybeBound =
+      [ arc nstate (Res rbmoBoundP) (Res rbmoUnknown) ]
     -- internal state
     iState (State s) =
       [ arc nstate (Res rbmoIntP) (toRDFLabel $ unpack s) ]
@@ -130,7 +121,36 @@ sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
               ] ++ linkState link ++ iState state
     siteg = foldl raddArc g triples
 sitePatToRDF _ _ _ _ = undefined
+\end{code}
 
+\hide{
+\begin{code}
+{- Various utility functions -}
+
+-- | Construct a local name from the RDF graph's empty namespace
+-- | (which is assumed to exist and have been declared). This is
+-- | used to construct references to rules and agents defined in
+-- | the Kappa file and, presumably, annotated
+lname :: RDFGraph -> Text -> RDFLabel
+lname g n = Res $ makeScopedName Nothing base name
+  where 
+    name = case newLName n of
+      Just ln -> ln
+      Nothing -> error $ "Local name '" ++ (unpack n) ++ "' is not valid"
+    base = case M.lookup Nothing $ namespaces g of
+      Just u  -> u
+      Nothing -> error "The empty prefix (:) is not declared in the source graph"
+
+-- | Get a new, fresh bnode based on the given string, unique for
+-- | the graph
+newBnode :: RDFGraph -> String -> RDFLabel
+newBnode g n = newNode (Blank n) existing
+  where
+    existing = S.toList $ RDF.allLabels RDF.isBlank g
+
+-- | A version of addArc with arguments reversed suited to fold
+raddArc :: RDF.Label lb => RDF.NSGraph lb -> RDF.Arc lb -> RDF.NSGraph lb
+raddArc t a = addArc a t
 \end{code}
 }
 

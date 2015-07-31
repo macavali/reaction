@@ -19,6 +19,8 @@ module Flow.Kappa.Vocabulary (
   , rbmoBound
   , rbmoBoundP
   , rbmoIntP
+  , rbmoNothing
+  , rbmoUnknown
   ) where
 
 import Data.Maybe(fromMaybe)
@@ -94,6 +96,11 @@ rbmoBound = toR "Bound"
 rbmoIntP :: ScopedName
 rbmoIntP = toR "internal"
 
+rbmoNothing :: ScopedName
+rbmoNothing = toR "nothing"
+
+rbmoUnknown :: ScopedName
+rbmoUnknown = toR "unknown"
 \end{code}
 
 % Local Variables:
