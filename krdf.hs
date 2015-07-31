@@ -24,7 +24,7 @@ exec (Cfg { filename }) = do
   annotationGraph <- return $ annotations statements
   materialisedGraph <- return $ materialise statements annotationGraph
   hPutStr stdout $ formatGraphAsText materialisedGraph
-       
+
 main :: IO ()
 main = do
   execParser opts >>= exec

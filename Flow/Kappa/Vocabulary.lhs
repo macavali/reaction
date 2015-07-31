@@ -12,6 +12,13 @@ module Flow.Kappa.Vocabulary (
   , rbmoPatP
   , rbmoAgent
   , rbmoAgentP
+  , rbmoSite
+  , rbmoSiteP
+  , rbmoState
+  , rbmoStateP
+  , rbmoBound
+  , rbmoBoundP
+  , rbmoIntP
   ) where
 
 import Data.Maybe(fromMaybe)
@@ -65,6 +72,27 @@ rbmoAgentP = toR "agent"
 
 rbmoAgent :: ScopedName
 rbmoAgent = toR "Agent"
+
+rbmoSiteP :: ScopedName
+rbmoSiteP = toR "site"
+
+rbmoSite :: ScopedName
+rbmoSite = toR "Site"
+
+rbmoStateP :: ScopedName
+rbmoStateP = toR "state"
+
+rbmoState :: ScopedName
+rbmoState = toR "State"
+
+rbmoBoundP :: ScopedName
+rbmoBoundP = toR "bound"
+
+rbmoBound :: ScopedName
+rbmoBound = toR "Bound"
+
+rbmoIntP :: ScopedName
+rbmoIntP = toR "internal"
 
 \end{code}
 
