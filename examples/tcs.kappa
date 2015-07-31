@@ -38,7 +38,7 @@
 #^   rbmo:stateAssignment psimod:MOD:00696 .
 %agent: KinA(H405~u~p)
 
-#^ :Spo0A a rbmo:agent ;
+#^ :Spo0A a rbmo:Agent ;
 #^   rbmo:hasSite :Spo0A:RR  ;
 #^   bqbiol:is uniprot:P06534 ;
 #^   biopax:physicalEntity biopax:Protein ;
@@ -93,7 +93,7 @@
 #^   biopax:physicalEntity biopax:Rna .
 %agent: M() 
 
-#^ :P a rbmo:agent ;
+#^ :P a rbmo:Agent ;
 #^   bqbiol:is uniprot:P42212 ;
 #^   dcterms:title "Green fluorescent protein" ;
 #^   biopax:physicalEntity biopax:Protein ;
