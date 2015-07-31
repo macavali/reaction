@@ -16,8 +16,7 @@ module Flow.Kappa.Vocabulary (
   , rbmoSiteP
   , rbmoState
   , rbmoStateP
-  , rbmoBound
-  , rbmoBoundP
+  , rbmoBindingP
   , rbmoIntP
   , rbmoNothing
   , rbmoUnknown
@@ -87,11 +86,8 @@ rbmoStateP = toR "state"
 rbmoState :: ScopedName
 rbmoState = toR "State"
 
-rbmoBoundP :: ScopedName
-rbmoBoundP = toR "bound"
-
-rbmoBound :: ScopedName
-rbmoBound = toR "Bound"
+rbmoBindingP :: ScopedName
+rbmoBindingP = toR "binding"
 
 rbmoIntP :: ScopedName
 rbmoIntP = toR "internal"
