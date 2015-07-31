@@ -102,11 +102,15 @@ sitePatToRDF :: (Text, SiteP) -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
   where
     nstate  = newBnode g "state"
-    -- bound state
+    -- bound state, construct a blank node from the given blank
+    -- node b to ensure consistent naming for "rule scope"
     linkState (Link l) =
       [ arc nstate (Res rbmoBoundP) (Blank $ b ++ "_" ++ unpack l) ]
+    -- when we know the site is bound, but we do not know to what
+    -- use a new blank node
     linkState Bound =
       [ arc nstate (Res rbmoBoundP) (newBnode g "binding") ]
+    -- unbound and maybebound use special rbmo terms
     linkState Unbound =
       [ arc nstate (Res rbmoBoundP) (Res rbmoNothing) ]
     linkState MaybeBound =
