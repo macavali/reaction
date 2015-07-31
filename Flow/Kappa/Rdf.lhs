@@ -41,10 +41,11 @@ annotations statements =
    Right g  -> g
 
 -- | Materialise information latent in the Kappa representation into RDF
+-- | TODO: possibly handle statement types other than rule declarations
 materialise :: [Statement] -> RDFGraph -> RDFGraph
 materialise [] g = g
 materialise (RD rule:rest) g = materialise rest (ruleToRDF rule g)
-materialise (_:rest) g = materialise rest g
+materialise (_:rest)       g = materialise rest g
 
 -- | Produce RDF statements about a rule, and add them to the graph
 -- | TODO: we should also materialise the rate expression, but for
