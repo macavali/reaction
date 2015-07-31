@@ -104,27 +104,27 @@ sitePats []     _ _ g = g
 sitePatToRDF :: (Text, SiteP) -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
 sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
   where
-    nstate  = newBnode g "state"
+    nsite  = newBnode g "site"
     -- bound state, construct a blank node from the given blank
     -- node b to ensure consistent naming for "rule scope"
     linkState (Link l) =
-      [ arc nstate (Res rbmoBoundP) (Blank $ b ++ "_" ++ unpack l) ]
+      [ arc nsite (Res rbmoBoundP) (Blank $ b ++ "_" ++ unpack l) ]
     -- when we know the site is bound, but we do not know to what
     -- use a new blank node
     linkState Bound =
-      [ arc nstate (Res rbmoBoundP) (newBnode g "binding") ]
+      [ arc nsite (Res rbmoBoundP) (newBnode g "binding") ]
     -- unbound and maybebound use special rbmo terms
     linkState Unbound =
-      [ arc nstate (Res rbmoBoundP) (Res rbmoNothing) ]
+      [ arc nsite (Res rbmoBoundP) (Res rbmoNothing) ]
     linkState MaybeBound =
-      [ arc nstate (Res rbmoBoundP) (Res rbmoUnknown) ]
+      [ arc nsite (Res rbmoBoundP) (Res rbmoUnknown) ]
     -- internal state
     iState (State s) =
-      [ arc nstate (Res rbmoIntP) (toRDFLabel $ unpack s) ]
+      [ arc nsite (Res rbmoIntP) (toRDFLabel $ unpack s) ]
     iState _    = []
-    triples = [ arc anchor (Res rbmoStateP) nstate
-              , arc nstate RDF.resRdfType (Res rbmoState)
-              , arc nstate (Res rbmoStateP) (lname g name)
+    triples = [ arc anchor (Res rbmoSiteP) nsite
+              , arc nsite RDF.resRdfType (Res rbmoState)
+              , arc nsite (Res rbmoStateP) (lname g name)
               ] ++ linkState link ++ iState state
     siteg = foldl raddArc g triples
 sitePatToRDF _ _ _ _ = undefined
