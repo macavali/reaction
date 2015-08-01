@@ -20,7 +20,6 @@ import Swish.Namespace(makeScopedName)
 import Swish.QName(newLName)
 import Swish.RDF.Graph(RDFGraph, RDFLabel(..), ToRDFLabel(..), arc, addArc, namespaces, newNode)
 import Swish.RDF.Parser.Turtle(parseTurtlefromText)
-import Swish.RDF.Vocabulary.DublinCore
 \end{code}
 }
 
