@@ -1,0 +1,199 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://www.purl.org/rbm/rbmo/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.purl.org/rbm/rbmo/>
+    a owl:Ontology ;
+    rdfs:comment "An ontology for annotating rule-based models"@en ;
+    rdfs:label "rbmo"@en .
+
+:Agent
+    a owl:Class ;
+    rdfs:comment "Type for entities that represent biological entities participating in a rule."@en ;
+    rdfs:label "Agent"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :hasConfiguration ;
+        owl:someValuesFrom :Configuration
+    ], [
+        a owl:Restriction ;
+        owl:onProperty :compartment ;
+        owl:someValuesFrom :Compartment
+    ], [
+        a owl:Restriction ;
+        owl:onProperty :hasSite ;
+        owl:someValuesFrom :Site
+    ] .
+
+:BioNetGen
+    a owl:Class ;
+    rdfs:comment "To indicate a model type as BioNetGen."@en ;
+    rdfs:label "BioNetGen"@en ;
+    rdfs:subClassOf :Model ;
+    owl:disjointWith :Kappa .
+
+:Compartment
+    a owl:Class ;
+    rdfs:comment "Type for compartments."@en ;
+    rdfs:label "Compartment"@en ;
+    rdfs:subClassOf owl:Thing .
+
+:Configuration
+    a owl:Class ;
+    rdfs:comment "Specifies a configuration  of an agent in terms of the status of its sites."@en ;
+    rdfs:label "Configuration"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :hasSite ;
+        owl:someValuesFrom :Site
+    ] .
+
+:Kappa
+    a owl:Class ;
+    rdfs:comment "To indicate a model type as Kappa." ;
+    rdfs:label "Kappa" ;
+    rdfs:subClassOf :Model .
+
+:Model
+    a owl:Class ;
+    rdfs:comment "Specifies the type of a model"@en ;
+    rdfs:label "Model"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :hasRule ;
+        owl:someValuesFrom :Rule
+    ], [
+        a owl:Restriction ;
+        owl:onProperty :hasAgent ;
+        owl:someValuesFrom :Agent
+    ] .
+
+:Rule
+    a owl:Class ;
+    rdfs:comment "Type for biochemical interactions  between agents."@en ;
+    rdfs:label "Rule"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :subrule ;
+        owl:someValuesFrom :Rule
+    ] .
+
+:Site
+    a owl:Class ;
+    rdfs:comment "Type for sites of agents."@en ;
+    rdfs:label "Site"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :hasState ;
+        owl:someValuesFrom :State
+    ] .
+
+:State
+    a owl:Class ;
+    rdfs:comment "Type for internal states of sites."@en ;
+    rdfs:label "State"@en ;
+    rdfs:subClassOf owl:Thing, [
+        a owl:Restriction ;
+        owl:onProperty :stateAssignment ;
+        owl:someValuesFrom owl:Thing
+    ] .
+
+:compartment
+    a owl:ObjectProperty ;
+    rdfs:comment "To indicate compartments."@en ;
+    rdfs:label "compartment"@en ;
+    rdfs:range :Compartment .
+
+:hasAgent
+    a owl:ObjectProperty ;
+    rdfs:label "hasAgent"@en ;
+    rdfs:comment "Specifies that a model has an agent. Its value is the identifier for the agent."@en ;
+    rdfs:domain :Model ;
+    rdfs:range :Agent .
+
+:agentOf
+    a owl:ObjectProperty ;
+    rdfs:label "agentOf"@en ;
+    rdfs:comment "Inverse of hasAgent."@en ;
+    owl:inverseOf :hasAgent .
+
+:hasConfiguration
+    a owl:ObjectProperty ;
+    rdfs:label "hasConfiguration"@en ;
+    rdfs:comment "Specifies that a special configuration of an agent includes additional information."@en ;
+    rdfs:domain :Agent ;
+    rdfs:range :Configuration .
+
+:configurationOf
+    a owl:ObjectProperty ;
+    rdfs:comment "Inverse of hasConfiguration."@en ;
+    rdfs:label "configurationOf"@en ;
+    owl:inverseOf :hasConfiguration .
+
+:hasRule
+    a owl:ObjectProperty ;
+    rdfs:label "hasRule"@en ;
+    rdfs:comment "Specifies that a model has a rule. Its value is the identifier for the rule."@en ;
+    rdfs:domain :Model ;
+    rdfs:range :Rule .
+
+:ruleOf
+    a owl:ObjectProperty ;
+    rdfs:label "ruleOf"@en ;
+    rdfs:comment "Inverse of hasRule."@en ;
+    owl:inverseOf :hasRule .
+
+:hasSite
+    a owl:ObjectProperty ;
+    rdfs:label "hasSite"@en ;
+    rdfs:comment "Specifies that an agent has a site. Its value is the identifier for the site."@en ;
+    rdfs:domain :Agent ;
+    rdfs:range :Site ;
+    owl:inverseOf :siteOf .
+
+:siteOf
+    a owl:ObjectProperty ;
+    rdfs:comment "Inverse of hasSite."@en ;
+    rdfs:label "siteOf"@en ;
+    owl:inverseOf :hasSite .
+
+:hasState
+    a owl:ObjectProperty ;
+    rdfs:label "hasState"@en ;
+    rdfs:comment "Specifies that a site has an internal state. Its value is the identifier for the state."@en ;
+    rdfs:domain :Site ;
+    rdfs:range :State .
+
+:stateOf
+    a owl:ObjectProperty ;
+    rdfs:label "stateOf"@en ;
+    rdfs:comment "Specifies the site to which an internal state applies."@en ;
+    rdfs:domain :State ;
+    rdfs:range :Site .
+
+:stateAssignment
+    a owl:ObjectProperty ;
+    rdfs:comment "Links a state to its value, e.g. a term from an external ontology."@en ;
+    rdfs:domain :State ;
+    rdfs:label "stateAssignment"@en .
+
+:subrule
+    a owl:ObjectProperty ;
+    rdfs:comment "Specifies that a rule has a subrule, for example part of a KaSim rule which uses tokens. Its value is the identifier for the subrule."@en ;
+    rdfs:domain :Rule ;
+    rdfs:label "subrule"@en ;
+    rdfs:range :Rule .
+
+[]
+    a owl:AllDisjointClasses ;
+    owl:members (:Agent
+        :Compartment
+        :Configuration
+        :Model
+        :Rule
+        :Site
+        :State
+    ) .
+
