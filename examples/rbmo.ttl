@@ -1,62 +1,113 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rbmo: <http://www.purl.org/rbm/rbmo/> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
+@prefix rbmo:   <http://www.purl.org/rbm/rbmo/> .
+@prefix people: <http://www.purl.org/rbm/people#> .
 
 rbmo: a owl:Ontology ;
     rdfs:label "rbmo"@en ;
-    rdfs:comment "An ontology for annotating rule-based models"@en .
+    dc:title "An ontology for annotating rule-based models."@en ;
+    dc:author people:goksel, people:mcavaliere, people:ww .
 
 rbmo:Model a owl:Class ;
-    rdfs:comment "Specifies the type of a model"@en ;
+    rdfs:comment "A model in a rule-based language."@en ;
     rdfs:label "Model"@en .
 
 rbmo:Kappa a owl:Class ;
     rdfs:label "Kappa" ;
-    rdfs:comment "To indicate a model type as Kappa." ;
-    rdfs:subClassOf rbmo:Model .
+    rdfs:comment "A model implemented in Kappa." ;
+    rdfs:subClassOf rbmo:Model ;
+    owl:disjointWith rbmo:BioNetGen .
 
 rbmo:BioNetGen a owl:Class ;
     rdfs:label "BioNetGen"@en ;
-    rdfs:comment "To indicate a model type as BioNetGen."@en ;
+    rdfs:comment "A model implemented in BioNetGen."@en ;
     rdfs:subClassOf rbmo:Model ;
     owl:disjointWith rbmo:Kappa .
 
 rbmo:Rule a owl:Class ;
     rdfs:label "Rule"@en ;
-    rdfs:comment "Type for biochemical interactions  between agents."@en .
+    rdfs:comment "A rule expressing interactions between rbmo:Agents."@en .
 
 rbmo:Agent a owl:Class ;
-    rdfs:comment "Type for entities that represent biological entities participating in a rule."@en ;
+    rdfs:comment "A definition of an entity that can form part of an rbmo:Rule."@en ;
     rdfs:label "Agent"@en .
 
 rbmo:Site a owl:Class ;
     rdfs:label "Site"@en ;
-    rdfs:comment "Type for sites of agents."@en .
+    rdfs:comment "A definition of a site of an rbmo:Agent."@en .
 
 rbmo:State a owl:Class ;
     rdfs:label "State"@en ;
-    rdfs:comment "Type for internal states of sites."@en .
+    rdfs:comment "A definition of possible internal state of an rbmo:Site."@en .
 
-rbmo:Compartment a owl:Class ;
-    rdfs:label "Compartment"@en ;
-    rdfs:comment "Type for compartments."@en ;
-    rdfs:subClassOf owl:Thing .
+rbmo:Pattern a owl:Class ;
+    rdfs:label "Pattern"@en ;
+    rdfs:comment "A pattern that can match an agent in terms of the state of its sites."@en .
 
-rbmo:Configuration a owl:Class ;
-    rdfs:label "Configuration"@en ;
-    rdfs:comment "Specifies a configuration  of an agent in terms of the status of its sites."@en .
+rbmo:Observable a owl:Class ;
+    rdfs:label "Observable"@en ;
+    rdfs:comment "A group of rbmo:Patterns that is observed or recorded"@en .
 
-rbmo:hasRule a owl:ObjectProperty ;
-    rdfs:label "hasRule"@en ;
-    rdfs:comment "Specifies that a model has a rule. Its value is the identifier for the rule."@en ;
-    rdfs:domain rbmo:Model ;
-    rdfs:range rbmo:Rule .
+rbmo:Expression a owl:Class ;
+    rdfs:label "Expression"@en ;
+    rdfs:comment "A mathematical expression"@en .
 
-rbmo:ruleOf a owl:ObjectProperty ;
-    rdfs:label "ruleOf"@en ;
-    rdfs:comment "Inverse of hasRule."@en ;
-    owl:inverseOf rbmo:hasRule .
+rbmo:Nothing a owl:Class ;
+    rdfs:label "Nothing"@en ;
+    rdfs:label "The state of being unbound"@en ;
+    owl:subClassOf rbmo:State ;
+    owl:disjointWith rbmo:Unknown .
+
+rbmo:Unknown a owl:Class ;
+    rdfs:label "Unknown"@en ;
+    rdfs:comment "An unknown or unspecified state"@en ;
+    owl:subClassOf rbmo:State ;
+    owl:disjointWith rbmo:Nothing .
+
+rbmo:lhs a owl:ObjectProperty ;
+    rdfs:label "lhs"@en ;
+    rdfs:comment "The left-hand side of an rbmo:Rule"@en ;
+    rdfs:domain rbmo:Rule ;
+    rdfs:range rbmo:Pattern ;
+    owl:inverseOf rbmo:lhsOf .
+
+rbmo:lhsOf a owl:ObjectProperty ;
+    rdfs:label "lhsOf"@en ;
+    rdfs:comment "The left-hand side of an rbmo:Rule"@en ;
+    rdfs:domain rbmo:Pattern ;
+    rdfs:range rbmo:Rule ;
+    owl:inverseOf rbmo:lhs .
+
+rbmo:rhs a owl:ObjectProperty ;
+    rdfs:label "rhs"@en ;
+    rdfs:comment "The right-hand side of an rbmo:Rule"@en ;
+    rdfs:domain rbmo:Rule ;
+    rdfs:range rbmo:Pattern ;
+    owl:inverseOf rbmo:rhsOf .
+
+rbmo:rhsOf a owl:ObjectProperty ;
+    rdfs:label "rhsOf"@en ;
+    rdfs:comment "The right-hand side of an rbmo:Rule"@en ;
+    rdfs:domain rbmo:Pattern ;
+    rdfs:range rbmo:Rule ;
+    owl:inverseOf rbmo:rhs .
+
+rbmo:rate a owl:ObjectProperty ;
+    rdfs:label "rate"@en ;
+    rdfs:comment "The rate at which an rbmo:Rule operates"@en ;
+    rdfs:domain rbmo:Rule ;
+    rdfs:range rbmo:Expression ;
+    owl:inverseOf rbmo:rateOf .
+
+rbmo:rateOf a owl:ObjectProperty ;
+    rdfs:label "rateOf"@en ;
+    rdfs:comment "The rate at which an rbmo:Rule operates"@en ;
+    rdfs:domain rbmo:Expression ;
+    rdfs:range rbmo:Rule ;
+    owl:inverseOf rbmo:rule .
 
 rbmo:subrule a owl:ObjectProperty ;
     rdfs:label "subrule"@en ;
@@ -64,70 +115,89 @@ rbmo:subrule a owl:ObjectProperty ;
     rdfs:domain rbmo:Rule ;
     rdfs:range rbmo:Rule .
 
-rbmo:hasAgent a owl:ObjectProperty ;
-    rdfs:label "hasAgent"@en ;
-    rdfs:comment "Specifies that a model has an agent. Its value is the identifier for the agent."@en ;
-    rdfs:domain rbmo:Model ;
-    rdfs:range rbmo:Agent .
-
-rbmo:agentOf a owl:ObjectProperty ;
-    rdfs:label "agentOf"@en ;
-    rdfs:comment "Inverse of hasAgent."@en ;
-    owl:inverseOf rbmo:hasAgent .
-
 rbmo:hasSite a owl:ObjectProperty ;
     rdfs:label "hasSite"@en ;
-    rdfs:comment "Specifies that an agent has a site. Its value is the identifier for the site."@en ;
+    rdfs:comment "Specifies that an rbmo:Agent has an rbmo:Site."@en ;
     rdfs:domain rbmo:Agent ;
-    rdfs:range rbmo:Site .
+    rdfs:range rbmo:Site ;
+    owl:inverseOf rbmo:siteOf .
 
 rbmo:siteOf a owl:ObjectProperty ;
-    rdfs:comment "Inverse of hasSite."@en ;
+    rdfs:comment "Specifies that an rbmo:Site is on an rbmo:Agent."@en ;
     rdfs:label "siteOf"@en ;
+    rdfs:domain rbmo:Site ;
+    rdfs:range rbmo:Agent ;
     owl:inverseOf rbmo:hasSite .
 
 rbmo:hasState a owl:ObjectProperty ;
     rdfs:label "hasState"@en ;
-    rdfs:comment "Specifies that a site has an internal state. Its value is the identifier for the state."@en ;
+    rdfs:comment "Specifies that an rbmo:Site has a a possible configuration rbmo:State. Used in declarations."@en ;
     rdfs:domain rbmo:Site ;
-    rdfs:range rbmo:State .
+    rdfs:range rbmo:State ;
+    owl:inverseOf rbmo:stateOf .
 
 rbmo:stateOf a owl:ObjectProperty ;
     rdfs:label "stateOf"@en ;
-    rdfs:comment "Specifies the site to which an internal state applies."@en ;
+    rdfs:comment "Specifies that an rbmo:State is a possible configuration of rbmo:Site. Used in declarations."@en ;
     rdfs:domain rbmo:State ;
-    rdfs:range rbmo:Site .
+    rdfs:range rbmo:Site ;
+    owl:inverseOf rbmo:hasState .
 
+rbmo:state a owl:ObjectProperty ;
+    rdfs:label "state"@en ;
+    rdfs:comment "Specifies the particular state of an rbmo:Agent. Used in patterns."@en ;
+    rdfs:domain rbmo:Pattern .
+#    rdfs:range rbmo:State .
+
+rbmo:site a owl:ObjectProperty ;
+    rdfs:label "site"@en ;
+    rdfs:comment "Specifies the rbmo:Site to which a particular state applies. Used in patterns."@en ;
+#    rdfs:domain rbmo:Pattern ;
+    rdfs:range rbmo:Site .
+    
 rbmo:stateAssignment a owl:ObjectProperty ;
     rdfs:label "stateAssignment"@en ;
     rdfs:comment "Links a state to its value, e.g. a term from an external ontology."@en ;
     rdfs:domain rbmo:State .
 
-rbmo:hasConfiguration a owl:ObjectProperty ;
-    rdfs:label "hasConfiguration"@en ;
-    rdfs:comment "Specifies that a special configuration of an agent includes additional information."@en ;
-    rdfs:domain rbmo:Agent ;
-    rdfs:range rbmo:Configuration .
+rbmo:agent a owl:ObjectProperty ;
+    rdfs:label "agent"@en ;
+    rdfs:comment "Specifies which rbmo:Agent a pattern is meant to match."@en ;
+    rdfs:domain rbmo:Pattern ;
+    rdfs:range rbmo:Agent .
 
-rbmo:configurationOf a owl:ObjectProperty ;
-    rdfs:comment "Inverse of hasConfiguration."@en ;
-    rdfs:label "configurationOf"@en ;
-    owl:inverseOf rbmo:hasConfiguration .
+[
+    a owl:AllDisjointClasses ;
+    owl:members (
+        rbmo:Model
+        rbmo:Rule
+        rbmo:Agent
+        rbmo:Site
+        rbmo:State
+        rbmo:Pattern
+        rbmo:Observable
+        rbmo:Expression
+        rbmo:Compartment
+    )
+] .
+
+people:goksel a foaf:Person;
+    foaf:homepage <http://homepages.cs.ncl.ac.uk/goksel.misirli/> .
+
+people:mcavaliere a foaf:Person;
+    foaf:homepage <https://sites.google.com/site/researchcavaliere/> .
+
+people:ww a foaf:Person;
+    foaf:homepage <https://tardis.ed.ac.uk/~wwaites/> .
+
+#######
+rbmo:Compartment a owl:Class ;
+    rdfs:label "Compartment"@en ;
+    rdfs:comment "Type for compartments."@en ;
+    rdfs:subClassOf owl:Thing .
 
 rbmo:compartment a owl:ObjectProperty ;
     rdfs:label "compartment"@en ;
     rdfs:comment "To indicate compartments."@en ;
     rdfs:range rbmo:Compartment .
 
-[
-    a owl:AllDisjointClasses ;
-    owl:members (
-        rbmo:Agent
-        rbmo:Compartment
-        rbmo:Configuration
-        rbmo:Model
-        rbmo:Rule
-        rbmo:Site
-        rbmo:State
-    )
-] .

@@ -104,8 +104,8 @@ rdfs:seeAlso a owl:AnnotationProperty.
 {?A owl:onProperty ?X; owl:minCardinality ?N. ?N math:greaterThan 2 . owl:Thing @has rdfs:subClassOf ?B. ?B owl:onProperty ?P; owl:someValuesFrom ?O. ?O owl:oneOf ?L. ?L rdf:first ?S; rdf:rest rdf:nil. ?S @has rdf:type ?D. ?D owl:onProperty ?Q; owl:maxCardinality ?M. ?M math:equalTo 2 . ?Q owl:inverseOf ?P. ?C rdfs:subClassOf ?A} => {?C owl:equivalentClass owl:Nothing}.
 {?Z @has owl:equivalentClass ?J. ?J @has owl:intersectionOf ?L. ?L :item ?I0. ?I0 owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 1 . ?L :item ?I1. ?I1 owl:onProperty ?P1; owl:someValuesFrom ?C1. ?C1 @has owl:intersectionOf ?K1. ?K1 :item ?X1. ?X1 owl:onProperty ?T; owl:maxCardinality ?M1. ?M1 math:equalTo 1 . ?K1 :item ?X2. ?X2 owl:onProperty ?T1; owl:someValuesFrom ?D1. ?L :item ?I2. ?I2 owl:onProperty ?P2; owl:someValuesFrom ?C2. ?C2 @has owl:intersectionOf ?K2. ?K2 :item ?Y1. ?Y1 owl:onProperty ?T; owl:maxCardinality ?M2. ?M2 math:equalTo 1 . ?K2 :item ?Y2. ?Y2 owl:onProperty ?T2; owl:someValuesFrom ?D2. ?D2 owl:disjointWith ?D1. ?P1 rdfs:subPropertyOf ?P. ?P2 rdfs:subPropertyOf ?P. ?T1 rdfs:subPropertyOf ?T. ?T2 rdfs:subPropertyOf ?T} => {?Z owl:equivalentClass owl:Nothing}.
 {?J @has owl:intersectionOf ?L. ?L :item ?I1. ?I1 owl:onProperty ?P; owl:someValuesFrom ?S. ?S owl:onProperty ?Q; owl:minCardinality ?N. ?N math:equalTo 2 . ?L :item ?I2. ?I2 owl:onProperty ?P; owl:allValuesFrom ?A. ?A @has owl:unionOf ?K. ?K :item ?C, ?V. ?V owl:onProperty ?Q; owl:maxCardinality ?M. ?M math:equalTo 1 . ?L :item ?I3. ?I3 owl:onProperty ?P; owl:allValuesFrom ?D. ?C owl:disjointWith ?D} => {?J owl:equivalentClass owl:Nothing}.
-{?C1 @has owl:equivalentClass ?A. ?A owl:onProperty ?P1; owl:someValuesFrom ?C6. ?P1 @has rdfs:domain ?C1; @has rdfs:range ?C6; @has rdf:type owl:FunctionalProperty. ?C1 @has owl:equivalentClass ?B. ?B owl:onProperty ?P3; owl:someValuesFrom ?C5. ?P3 @has rdfs:domain ?C1; @has rdfs:range ?C5; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?C. ?C owl:onProperty ?P2; owl:someValuesFrom ?C6. ?P2 @has rdfs:domain ?C5; @has rdfs:range ?C6; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?D. ?D owl:onProperty ?P7; owl:cardinality ?X1. ?P7 owl:inverseOf ?P3. ?C6 @has owl:equivalentClass ?F. ?F owl:onProperty ?P8; owl:cardinality ?X2. ?P8 owl:inverseOf ?P2. ?C6 @has owl:equivalentClass ?H. ?H owl:onProperty ?P9; owl:cardinality ?X3. ?P9 owl:inverseOf ?P1. ?H @has owl:equivalentClass ?I. ?I owl:onProperty ?P4; owl:someValuesFrom ?C3. ?P4 @has rdfs:domain ?C6; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C3 @has owl:equivalentClass ?G. ?G owl:onProperty ?P6; owl:maxCardinality ?X4. ?P6 owl:inverseOf ?P4. (?X1 ?X2) math:product ?X. ?X math:notEqualTo ?X3} => {?C3 owl:equivalentClass owl:Nothing}.
-{?C1 @has owl:equivalentClass ?A. ?A owl:onProperty ?P1; owl:someValuesFrom ?C3. ?P1 @has rdfs:domain ?C1; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C1 @has owl:equivalentClass ?B. ?B owl:onProperty ?P3; owl:someValuesFrom ?C5. ?P3 @has rdfs:domain ?C1; @has rdfs:range ?C5; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?C. ?C owl:onProperty ?P2; owl:someValuesFrom ?C3. ?P2 @has rdfs:domain ?C5; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?D. ?D owl:onProperty ?P7; owl:cardinality ?X1. ?P7 owl:inverseOf ?P3. ?C3 @has owl:equivalentClass ?F. ?F owl:onProperty ?P8; owl:cardinality ?X2. ?P8 owl:inverseOf ?P2. ?C3 @has owl:equivalentClass ?G. ?G owl:onProperty ?P9; owl:cardinality ?X3. ?P9 owl:inverseOf ?P1. (?X1 ?X2) math:product ?X. ?X math:notEqualTo ?X3} => {?C3 owl:equivalentClass owl:Nothing}.
+#{?C1 @has owl:equivalentClass ?A. ?A owl:onProperty ?P1; owl:someValuesFrom ?C6. ?P1 @has rdfs:domain ?C1; @has rdfs:range ?C6; @has rdf:type owl:FunctionalProperty. ?C1 @has owl:equivalentClass ?B. ?B owl:onProperty ?P3; owl:someValuesFrom ?C5. ?P3 @has rdfs:domain ?C1; @has rdfs:range ?C5; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?C. ?C owl:onProperty ?P2; owl:someValuesFrom ?C6. ?P2 @has rdfs:domain ?C5; @has rdfs:range ?C6; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?D. ?D owl:onProperty ?P7; owl:cardinality ?X1. ?P7 owl:inverseOf ?P3. ?C6 @has owl:equivalentClass ?F. ?F owl:onProperty ?P8; owl:cardinality ?X2. ?P8 owl:inverseOf ?P2. ?C6 @has owl:equivalentClass ?H. ?H owl:onProperty ?P9; owl:cardinality ?X3. ?P9 owl:inverseOf ?P1. ?H @has owl:equivalentClass ?I. ?I owl:onProperty ?P4; owl:someValuesFrom ?C3. ?P4 @has rdfs:domain ?C6; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C3 @has owl:equivalentClass ?G. ?G owl:onProperty ?P6; owl:maxCardinality ?X4. ?P6 owl:inverseOf ?P4. (?X1 ?X2) math:product ?X. ?X math:notEqualTo ?X3} => {?C3 owl:equivalentClass owl:Nothing}.
+#{?C1 @has owl:equivalentClass ?A. ?A owl:onProperty ?P1; owl:someValuesFrom ?C3. ?P1 @has rdfs:domain ?C1; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C1 @has owl:equivalentClass ?B. ?B owl:onProperty ?P3; owl:someValuesFrom ?C5. ?P3 @has rdfs:domain ?C1; @has rdfs:range ?C5; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?C. ?C owl:onProperty ?P2; owl:someValuesFrom ?C3. ?P2 @has rdfs:domain ?C5; @has rdfs:range ?C3; @has rdf:type owl:FunctionalProperty. ?C5 @has owl:equivalentClass ?D. ?D owl:onProperty ?P7; owl:cardinality ?X1. ?P7 owl:inverseOf ?P3. ?C3 @has owl:equivalentClass ?F. ?F owl:onProperty ?P8; owl:cardinality ?X2. ?P8 owl:inverseOf ?P2. ?C3 @has owl:equivalentClass ?G. ?G owl:onProperty ?P9; owl:cardinality ?X3. ?P9 owl:inverseOf ?P1. (?X1 ?X2) math:product ?X. ?X math:notEqualTo ?X3} => {?C3 owl:equivalentClass owl:Nothing}.
 
 {?D @has owl:equivalentClass ?C. ?C @has owl:unionOf ?L. ?L :allClasses owl:Nothing} => {?D owl:equivalentClass owl:Nothing}.
 {?D owl:complementOf ?C. ?C @has owl:intersectionOf ?L. ?L :allClasses owl:Thing} => {?D owl:equivalentClass owl:Nothing}.
@@ -197,32 +197,32 @@ rdfs:seeAlso a owl:AnnotationProperty.
 
 ### inconsistency detections @@
 
-{?A owl:equivalentClass owl:Nothing. ?X a ?A} => false.
+# {?A owl:equivalentClass owl:Nothing. ?X a ?A} => false.
 
-{rdf:nil rdf:first ?X} => false.
-{rdf:nil rdf:rest ?X} => false.
+# {rdf:nil rdf:first ?X} => false.
+# {rdf:nil rdf:rest ?X} => false.
 
-{?Y owl:disjointWith ?Z. ?X a ?Y, ?Z} => false.
-{?Y owl:disjointWith ?X; owl:equivalentClass ?X} => false.
+# {?Y owl:disjointWith ?Z. ?X a ?Y, ?Z} => false.
+# {?Y owl:disjointWith ?X; owl:equivalentClass ?X} => false.
 
-{?P a owl:FunctionalProperty. ?S ?P ?X, ?Y. ?X owl:differentFrom ?Y} => false.
-{?P a owl:InverseFunctionalProperty. ?X ?P ?O. ?Y ?P ?O. ?X owl:differentFrom ?Y} => false.
+# {?P a owl:FunctionalProperty. ?S ?P ?X, ?Y. ?X owl:differentFrom ?Y} => false.
+# {?P a owl:InverseFunctionalProperty. ?X ?P ?O. ?Y ?P ?O. ?X owl:differentFrom ?Y} => false.
 
-{?A owl:differentFrom ?A} => false.
+# {?A owl:differentFrom ?A} => false.
 
-{?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 0 . ?X ?P ?Y; a ?R} => false.
-{?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 1 . ?X ?P ?Y1, ?Y2; a ?R. ?Y2 owl:differentFrom ?Y1} => false.
-{?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 2 . ?X ?P ?Y1, ?Y2, ?Y3; a ?R. ?Y2 owl:differentFrom ?Y1. ?Y3 owl:differentFrom ?Y1, ?Y2} => false.
+# {?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 0 . ?X ?P ?Y; a ?R} => false.
+# {?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 1 . ?X ?P ?Y1, ?Y2; a ?R. ?Y2 owl:differentFrom ?Y1} => false.
+# {?R owl:onProperty ?P; owl:maxCardinality ?M. ?M math:equalTo 2 . ?X ?P ?Y1, ?Y2, ?Y3; a ?R. ?Y2 owl:differentFrom ?Y1. ?Y3 owl:differentFrom ?Y1, ?Y2} => false.
 
-{?R owl:onProperty ?P; owl:minCardinality ?M. ?P @has rdfs:range ?X. ?X @has owl:oneOf ?L. ?L :memberCount ?N. ?M math:greaterThan ?N} => false.
+# {?R owl:onProperty ?P; owl:minCardinality ?M. ?P @has rdfs:range ?X. ?X @has owl:oneOf ?L. ?L :memberCount ?N. ?M math:greaterThan ?N} => false.
 
-{?R owl:onProperty ?P; owl:hasValue ?V. ?X ?P ?Y; a ?R. ?V owl:differentFrom ?Y} => false.
-{?R owl:onProperty ?P; owl:someValuesFrom ?S. ?S owl:equivalentClass owl:Nothing. ?X a ?R} => false.
+# {?R owl:onProperty ?P; owl:hasValue ?V. ?X ?P ?Y; a ?R. ?V owl:differentFrom ?Y} => false.
+# {?R owl:onProperty ?P; owl:someValuesFrom ?S. ?S owl:equivalentClass owl:Nothing. ?X a ?R} => false.
 
-{owl:Thing @has owl:oneOf ?L} => false.
-{?C @has owl:oneOf ?L. ?P rdfs:domain ?C. ?X ?P ?O. ?L :notItem ?X} => false.
-{?C @has owl:oneOf ?L. ?P rdfs:range ?C. ?S ?P ?X. ?L :notItem ?X} => false.
-{?C @has owl:oneOf ?L. ?X a ?C. ?L :notItem ?X} => false.
+# {owl:Thing @has owl:oneOf ?L} => false.
+# {?C @has owl:oneOf ?L. ?P rdfs:domain ?C. ?X ?P ?O. ?L :notItem ?X} => false.
+# {?C @has owl:oneOf ?L. ?P rdfs:range ?C. ?S ?P ?X. ?L :notItem ?X} => false.
+# {?C @has owl:oneOf ?L. ?X a ?C. ?L :notItem ?X} => false.
 
 
 ### support @@
@@ -230,28 +230,28 @@ rdfs:seeAlso a owl:AnnotationProperty.
 {?S rdf:first ?X} => {?S :item ?X}.
 {?S rdf:rest ?B. ?B :item ?X} => {?S :item ?X}.
 
-{} => {rdf:nil :notItem ?X}.
+#{} => {rdf:nil :notItem ?X}.
 {?S rdf:first ?A. ?A owl:differentFrom ?X. ?S rdf:rest ?B. ?B :notItem ?X} => {?S :notItem ?X}.
 
-{} => {?X :includes rdf:nil}.
+#{} => {?X :includes rdf:nil}.
 {?S rdf:first ?A. ?X :item ?E. ?E @has owl:equivalentClass ?A. ?S rdf:rest ?B. ?X :includes ?B} => {?X :includes ?S}.
 
-{} => {?X :inAllOf rdf:nil}.
+#{} => {?X :inAllOf rdf:nil}.
 {?S rdf:first ?A. ?X a ?A. ?S rdf:rest ?B. ?X :inAllOf ?B} => {?X :inAllOf ?S}.
 
 {?S rdf:first ?A. ?X a ?A} => {?X :inSomeOf ?S}.
 {?S rdf:rest ?B. ?X :inSomeOf ?B} => {?X :inSomeOf ?S}.
 
-{} => {rdf:nil :memberCount 0}.
+#{} => {rdf:nil :memberCount 0}.
 {?A rdf:rest ?B. ?B :memberCount ?M. (?M 1) math:sum ?N} => {?A :memberCount ?N}.
 
-{} => {rdf:nil :allClasses ?C}.
+#{} => {rdf:nil :allClasses ?C}.
 {?L rdf:first ?A; rdf:rest ?B. ?A owl:equivalentClass ?C. ?B :allClasses ?C} => {?L :allClasses ?C}.
 
 {?L rdf:first ?A. ?A owl:equivalentClass ?C} => {?L :someClasses ?C}.
 {?L rdf:rest ?B. ?B :someClasses ?C} => {?L :someClasses ?C}.
 
-{} => {?P :reflexive rdf:nil}.
+#{} => {?P :reflexive rdf:nil}.
 {?S rdf:first ?A. ?A ?P ?A. ?S rdf:rest ?B. ?P :reflexive ?B} => {?P :reflexive ?S}.
 
 {?L rdf:first ?O. ?O @has owl:oneOf ?J. ?J :item ?A} => {?L :oneItem ?A}.

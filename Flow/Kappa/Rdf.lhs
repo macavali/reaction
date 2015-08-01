@@ -18,7 +18,7 @@ import Flow.Kappa.Vocabulary
 import qualified Swish.RDF as RDF
 import Swish.Namespace(makeScopedName)
 import Swish.QName(newLName)
-import Swish.RDF.Graph(RDFGraph, RDFLabel(..), ToRDFLabel(..), arc, addArc, namespaces, newNode)
+import Swish.RDF.Graph(RDFGraph, RDFLabel(..), arc, addArc, namespaces, newNode)
 import Swish.RDF.Parser.Turtle(parseTurtlefromText)
 \end{code}
 }
@@ -61,11 +61,11 @@ ruleToRDF Rule { desc, lhs, rhs } g = rhsg
     -- the top level statements about the rule. minimally, its
     -- type, and linkage for rate expression and lhs, rhs parts
     triples   = [ arc nrule RDF.resRdfType (Res rbmoRule)
-                , arc nrule (Res rbmoRate) nrate
+                , arc nrule (Res rbmorate) nrate
                 ]
     ruleg     = foldl raddArc g triples
-    lhsg      = agentPats alhs brule nrule (Res rbmoLhs) ruleg
-    rhsg      = agentPats arhs brule nrule (Res rbmoRhs) lhsg
+    lhsg      = agentPats alhs brule nrule (Res rbmolhs) ruleg
+    rhsg      = agentPats arhs brule nrule (Res rbmorhs) lhsg
 
 -- | Simple tail-recursive utility to iterate through agent patterns
 agentPats :: [AgentP] -> RDFLabel -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
@@ -82,46 +82,50 @@ agentPatToRDF (AgentP name sites) b r p g = siteg
   where
     npat    = newBnode g "pat"
     triples = [ arc r p npat
-              , arc npat (Res rbmoConfigurationOf) (lname g name)
+              , arc npat RDF.resRdfType (Res rbmoPattern)
+              , arc npat (Res rbmoagent) (lname g name)
               ]
     ag      = foldl raddArc g triples
-    siteg   = sitePats (H.toList sites) b npat ag
+    siteg   = sitePats name (H.toList sites) b npat ag
 
 -- | Simple tail-recursive utility to iterate through site patterns
-sitePats :: [(Text, SiteP)] -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
-sitePats (s:ss) b a g = sitePatToRDF s b a nextg
-  where nextg = sitePats ss b a g
-sitePats []     _ _ g = g
+sitePats :: Text -> [(Text, SiteP)] -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
+sitePats a (s:ss) b an g = sitePatToRDF a s b an nextg
+  where nextg = sitePats a ss b an g
+sitePats _ []     _ _  g = g
 
 -- | Produce RDF statements about a site patern
 -- | The arguments are similar to `agentPatToRDF` although in
 -- | this case, the anchor refers to the agent pattern.
-sitePatToRDF :: (Text, SiteP) -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
-sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
+sitePatToRDF :: Text -> (Text, SiteP) -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
+sitePatToRDF agent (name, (link, state)) (Blank b) anchor g = siteg
   where
     nsite  = newBnode g "site"
     -- bound state, construct a blank node from the given blank
     -- node b to ensure consistent naming for "rule scope"
     linkState (Link l) =
-      [ arc nsite (Res rbmoBindingP) (Blank $ b ++ "_" ++ unpack l) ]
+      [ arc nsite (Res rbmobinding) (Blank $ b ++ "_" ++ unpack l) ]
     -- when we know the site is bound, but we do not know to what
     -- use a new blank node
     linkState Bound =
-      [ arc nsite (Res rbmoBindingP) (newBnode g "binding") ]
+      [ arc nsite (Res rbmobinding) (newBnode g "binding") ]
     -- unbound and maybebound use special rbmo terms
     linkState Unbound =
-      [ arc nsite (Res rbmoBindingP) (Res rbmoNothing) ]
+      [ arc nsite (Res rbmobinding) (Res rbmoNothing) ]
     linkState MaybeBound =
-      [ arc nsite (Res rbmoBindingP) (Res rbmoUnknown) ]
+      [ arc nsite (Res rbmobinding) (Res rbmoUnknown) ]
     -- internal state
     iState (State s) =
-      [ arc nsite (Res rbmoIntP) (toRDFLabel $ unpack s) ]
+      [ arc nsite (Res rbmointernal) (lname g $ istatename s) ]
     iState _    = []
-    triples = [ arc anchor (Res rbmoHasState) nsite
-              , arc nsite (Res rbmoStateOf) (lname g name)
+    -- XXX ugly
+    sitename = pack $ (unpack agent) ++ "_" ++ (unpack name)
+    istatename s = pack $ (unpack sitename) ++ "_" ++ (unpack s)
+    triples = [ arc anchor (Res rbmostate) nsite
+              , arc nsite (Res rbmosite) (lname g sitename)
               ] ++ linkState link ++ iState state
     siteg = foldl raddArc g triples
-sitePatToRDF _ _ _ _ = undefined
+sitePatToRDF _ _ _ _ _ = undefined
 \end{code}
 
 \hide{

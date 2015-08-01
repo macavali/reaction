@@ -4,24 +4,42 @@
 module Flow.Kappa.Vocabulary (
   rbmoURI
   , namespaceRBMO
+
+  , rbmoModel
+  , rbmoKappa
+  , rbmoBioNetGen
+
   , rbmoRule
-  , rbmoRate
-  , rbmoLhs
-  , rbmoRhs
+  , rbmorate
+  , rbmolhs
+  , rbmolhsOf
+  , rbmorhs
+  , rbmorhsOf
+
   , rbmoAgent
-  , rbmoAgentP
+  , rbmoagent
+
   , rbmoSite
-  , rbmoSiteP
-  , rbmoBindingP
-  , rbmoIntP
+  , rbmohasSite
+  , rbmositeOf
+  , rbmosite
+    
+  , rbmoState
+  , rbmohasState
+  , rbmostateOf
+  , rbmostate
+    
+  , rbmobinding
+  , rbmointernal
+    
   , rbmoNothing
   , rbmoUnknown
-  , rbmoHasState
-  , rbmoStateOf
-  , rbmoHasSite
-  , rbmoSiteOf
-  , rbmoHasConfiguration
-  , rbmoConfigurationOf
+
+  , rbmoPattern
+    
+  , rbmoComplex
+  , rbmoExpression
+  , rbmoObservable
   ) where
 
 import Data.Maybe(fromMaybe)
@@ -52,59 +70,86 @@ namespaceRBMO = makeNamespace (Just "rbmo") rbmoURI
 toR :: LName -> ScopedName
 toR = makeNSScopedName namespaceRBMO
 
+rbmoModel :: ScopedName
+rbmoModel = toR "Model"
+
+rbmoKappa :: ScopedName
+rbmoKappa = toR "Kappa"
+
+rbmoBioNetGen :: ScopedName
+rbmoBioNetGen = toR "BioNetGen"
+
 rbmoRule :: ScopedName
 rbmoRule = toR "Rule"
-
-rbmoRate :: ScopedName
-rbmoRate = toR "rate"
-
-rbmoLhs :: ScopedName
-rbmoLhs = toR "lhs"
-
-rbmoRhs :: ScopedName
-rbmoRhs = toR "rhs"
-
-rbmoAgentP :: ScopedName
-rbmoAgentP = toR "agent"
 
 rbmoAgent :: ScopedName
 rbmoAgent = toR "Agent"
 
-rbmoSiteP :: ScopedName
-rbmoSiteP = toR "site"
-
 rbmoSite :: ScopedName
 rbmoSite = toR "Site"
 
-rbmoBindingP :: ScopedName
-rbmoBindingP = toR "binding"
+rbmoState :: ScopedName
+rbmoState = toR "State"
 
-rbmoIntP :: ScopedName
-rbmoIntP = toR "internal"
+rbmoPattern :: ScopedName
+rbmoPattern = toR "Pattern"
+
+rbmoComplex :: ScopedName
+rbmoComplex = toR "Complex"
+
+rbmoExpression :: ScopedName
+rbmoExpression = toR "Expression"
+
+rbmoObservable :: ScopedName
+rbmoObservable = toR "Observable"
+
+rbmorate :: ScopedName
+rbmorate = toR "rate"
+
+rbmolhs :: ScopedName
+rbmolhs = toR "lhs"
+
+rbmorhs :: ScopedName
+rbmorhs = toR "rhs"
+
+rbmorhsOf :: ScopedName
+rbmorhsOf = toR "rhsOf"
+
+rbmolhsOf :: ScopedName
+rbmolhsOf = toR "lhsOf"
+
+rbmoagent :: ScopedName
+rbmoagent = toR "agent"
+
+rbmobinding :: ScopedName
+rbmobinding = toR "binding"
+
+rbmointernal :: ScopedName
+rbmointernal = toR "internal"
 
 rbmoNothing :: ScopedName
-rbmoNothing = toR "nothing"
+rbmoNothing = toR "Nothing"
 
 rbmoUnknown :: ScopedName
-rbmoUnknown = toR "unknown"
+rbmoUnknown = toR "Unknown"
 
-rbmoHasSite :: ScopedName
-rbmoHasSite = toR "hasSite"
+rbmohasSite :: ScopedName
+rbmohasSite = toR "hasSite"
 
-rbmoSiteOf :: ScopedName
-rbmoSiteOf = toR "siteOf"
+rbmositeOf :: ScopedName
+rbmositeOf = toR "siteOf"
 
-rbmoHasState :: ScopedName
-rbmoHasState = toR "hasState"
+rbmosite :: ScopedName
+rbmosite = toR "site"
 
-rbmoStateOf :: ScopedName
-rbmoStateOf = toR "stateOf"
+rbmohasState :: ScopedName
+rbmohasState = toR "hasState"
 
-rbmoHasConfiguration :: ScopedName
-rbmoHasConfiguration = toR "hasConfiguration"
+rbmostateOf :: ScopedName
+rbmostateOf = toR "stateOf"
 
-rbmoConfigurationOf :: ScopedName
-rbmoConfigurationOf = toR "configurationOf"
+rbmostate :: ScopedName
+rbmostate = toR "state"
 \end{code}
 
 % Local Variables:

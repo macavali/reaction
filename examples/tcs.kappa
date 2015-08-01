@@ -16,84 +16,90 @@
 #^ @prefix bqbiol: <http://biomodels.net/biology-qualifiers/>.
 #^ @prefix biopax: <http://www.biopax.org/release/biopax-level3.owl#>.
 
-#^ : a rbmo:Kappa  ;
+#^ :model a rbmo:Kappa  ;
 #^  dcterms:title "TCS Kappa model" ;
 #^  dcterms:description "A Kappa moddel of a two-component system. The model represents the combination of a two-component system and a promoter architecture based on dual repression" ;
 #^  dcterms:creator "Goksel Misirli", "Matteo Cavaliere", "Alejandro Granados" ; 
 #^  foaf:isPrimaryTopicOf <https://purl.org/rbm/rbmo/examples/TCS.kappa> .
-  
 
 #^ :KinA a rbmo:Agent ;
-#^   rbmo:hasSite :KinA:H405 ;
+#^   dcterms:isPartOf :model ;
+#^   rbmo:hasSite :KinA_H405 ;
 #^   biopax:physicalEntity biopax:Protein ;
 #^   bqbiol:is uniprot:P16497 ;
 #^   ro:has_function go:GO:0000155 .
-#^ :KinA:H405   a rbmo:Site ;
-#^   rbmo:hasState :KinA:H405:u ;
-#^   rbmo:hasState :KinA:H405:p ;
+##
+## The underscore here is significant. This convention allows
+## tools to make the link between the Kappa syntax and the
+## URI for the site. And similarly for states.
+##
+#^ :KinA_H405 a rbmo:Site ;
+#^   rbmo:hasState :KinA_H405_u ;
+#^   rbmo:hasState :KinA_H405_p ;
 #^   bqbiol:isVersionOf ipr:IPR009082 .
-#^ :KinA:H405:u 	a rbmo:State ;
-#^   rbmo:stateAssignment	pr:PR:000026291 .
-#^ :KinA:H405:p 	a rbmo:State ;
+#^ :KinA_H405_u	a rbmo:State ;
+#^   rbmo:stateAssignment pr:PR:000026291 .
+#^ :KinA_H405_p	a rbmo:State ;
 #^   rbmo:stateAssignment psimod:MOD:00696 .
 %agent: KinA(H405~u~p)
 
 #^ :Spo0A a rbmo:Agent ;
-#^   rbmo:hasSite :Spo0A:RR  ;
+#^   dcterms:isPartOf :model ;
+#^   rbmo:hasSite :Spo0A_RR  ;
 #^   bqbiol:is uniprot:P06534 ;
 #^   biopax:physicalEntity biopax:Protein ;
-#^   ro:has_function go:GO:0000156 ;
-#^   rbmo:hasConfiguration :Spo0A_p .
-#^ :Spo0A:RR   a rbmo:Site ;
-#^   rbmo:hasState :Spo0A:RR:u ;
-#^   rbmo:hasState :Spo0A:RR:p ;
+#^   ro:has_function go:GO:0000156 .
+#^ :Spo0A_RR a rbmo:Site ;
+#^   rbmo:hasState :Spo0A_RR:u ;
+#^   rbmo:hasState :Spo0A_RR_p ;
 #^   bqbiol:isVersionOf ipr:IPR001789 .
-#^ :Spo0A:RR:u 	a rbmo:State;
-#^   rbmo:stateAssignment	pr:PR:000026291 .
-#^ :Spo0A:RR:p 	a rbmo:State;
+#^ :Spo0A_RR_u a rbmo:State;
+#^   rbmo:stateAssignment pr:PR:000026291 .
+#^ :Spo0A_RR_p a rbmo:State;
 #^   rbmo:stateAssignment psimod:MOD:00696 .
-#^ :Spo0A:DNAb   a rbmo:Site ;
+#^ :Spo0A_DNAb a rbmo:Site ;
 #^   bqbiol:isVersionOf ipr:IPR011991 .
 %agent: Spo0A(RR~u~p,DNAb)
 
-
 #^ :A a rbmo:Agent ; 
-#^   rbmo:hasSite :s1 ;
-#^   rbmo:hasSite :s2 ;
-#^   rbmo:hasConfiguration :FreeProm ;
+#^   dcterms:isPartOf :model ;
+#^   rbmo:hasSite :A_s1 ;
+#^   rbmo:hasSite :A_s2 ;
 #^   bqbiol:isVersionOf so:SO:0000167 ;
 #^   biopax:physicalEntity biopax:DnaRegion ;
 #^   sbol:nucleotides "TTGATCCCTCTTCACTTCTCAGAATACATACGGTAAAATATACAAAAGAAGATTTTTCGACAAATTCACGTTTCCTTGTTTGTCAAATTTCATTTTTAGTCGAAAAACAGAGAAAAACAT" ;
 #^   sbol:componentType so:SO:0000167 ;
 #^   sbol:annotation :s1_location ;	
 #^   sbol:annotation :s2_location .	
-#^ :s1	a rbmo:Site ;
+#^ :A_s1 a rbmo:Site ;
 #^   bqbiol:isVersionOf so:SO_0000057 ;
 #^   biopax:physicalEntity biopax:DnaRegion ;
 #^   sbol:nucleotides "TTCGACA" ;
 #^   sbol:componentType so:SO:0000057 .
-#^ :s2	a rbmo:Site ;
+#^ :A_s2 a rbmo:Site ;
 #^   bqbiol:isVersionOf so:SO:0000057 ;
 #^   biopax:physicalEntity biopax:DnaRegion;
 #^   sbol:nucleotides "AGTCGAA" ;
 #^   sbol:componentType so:SO:0000057 .
 #^ :s1_location a sbol:SequenceAnnotation ;
-#^   sbol:bioStart  56;
-#^   sbol:bioEnd  62 ;
-#^   sbol:component :s1 .  
+#^   sbol:bioStart 56;
+#^   sbol:bioEnd 62 ;
+#^   sbol:component :A_s1 .  
 #^ :s2_location a sbol:SequenceAnnotation ;
-#^   sbol:bioStart  98;
-#^   sbol:bioEnd  104 ;
-#^   sbol:component :s2 . 
+#^   sbol:bioStart 98;
+#^   sbol:bioEnd 104 ;
+#^   sbol:component :A_s2 . 
 %agent: A(s1,s2) 
 
 
 #^ :M a rbmo:Agent ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf so:SO:0000234 ;
 #^   biopax:physicalEntity biopax:Rna .
 %agent: M() 
 
 #^ :P a rbmo:Agent ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:is uniprot:P42212 ;
 #^   dcterms:title "Green fluorescent protein" ;
 #^   biopax:physicalEntity biopax:Protein ;
@@ -101,84 +107,98 @@
 %agent: P() 
 
 #^ :KKup a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000216 ;
 #^   dcterms:title "KinA~P" ;
 #^   dcterms:description "KinA phosphorylation" .
 'KKup'  KinA(H405~u) -> KinA(H405~p) @ 'kk_p' 
 
 #^ :Spo0A_KinA a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000177 ;
 #^   dcterms:title "Spo0A-KinA" ;
 #^   dcterms:description "Spo0A-KinA binding" .
 'Spo0A_KinA'	  Spo0A(RR,DNAb),KinA(H405) ->  Spo0A(RR!1,DNAb),KinA(H405!1) @ 'k_spo0a_KinA'
 
 #^ :Spo0Au_KinA_off a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180;
 #^   dcterms:title "Spo0A~U/KinA" ;
 #^   dcterms:description "Spo0A~U-KinA unbinding" .
 'Spo0Au_KinA_off'  Spo0A(RR~u!1, DNAb),KinA(H405!1) ->  Spo0A(RR~u, DNAb),KinA(H405) @ 'k_spo0a_KinA_off'
 
 #^ :Spo0Ap_KinA_off a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180 ;
 #^   dcterms:title "Spo0A~P/KinA" ;
 #^   dcterms:description "Spo0A~P-KinA unbinding" .
 'Spo0Ap_KinA_off' Spo0A(RR~p!1, DNAb),KinA(H405!1) -> Spo0A(RR~p, DNAb),KinA(H405) @ 'k_spo0a_KinAp_off'
 
 #^ :KinAtoSpo0A a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000216 ;
 #^   dcterms:title "Spo0A~P" ;
 #^   dcterms:description "Spo0A phosphorylation" .
 'KinAtoSpo0A'    Spo0A(RR~u!1, DNAb),KinA(H405~p!1) -> Spo0A(RR~p!1, DNAb),KinA(H405~u!1) @ 'k_KinAtospo0a'
 
 #^ :Spo0AtoKinA a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000330 ;
 #^   dcterms:title "Spo0A_unphosphorylation" ;
 #^   dcterms:description "Spo0A unphosphorylation when Spo0A is not bound to DNA" .
 'Spo0AtoKinA'    Spo0A(RR~p!1, DNAb),KinA(H405~u!1)-> Spo0A(RR~u!1, DNAb),KinA(H405~u!1) @ 'k_spo0atoKinA'
 
-#^  :Spo0Ap-depho a rbmo:Rule ;
+#^ :Spo0Ap-depho a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000330 ;
-#^    dcterms:title "Spo0A_unphosphorylation" ;
-#^    dcterms:description "Spo0A unphosphorylation when Spo0A is not bound to KinA" .
+#^   dcterms:title "Spo0A_unphosphorylation" ;
+#^   dcterms:description "Spo0A unphosphorylation when Spo0A is not bound to KinA" .
 'Spo0Ap-depho' Spo0A(RR~p, DNAb) -> Spo0A(RR~u, DNAb) @ 'k_spo0ap_depho'
 
 #^ :Spo0A-As1 a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0008134 ;
 #^   dcterms:title "Spo0A binding to tfbs1" ;
 #^   dcterms:description "Spo0A binds to tfbs1" .
 'Spo0A-As1' A(s1),Spo0A(RR~p,DNAb) -> A(s1!1),Spo0A(RR~p,DNAb!1) @ 'k10'
 
 #^ :Spo0A-As2 a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0008134 ;
 #^   dcterms:title "Spo0A binding to tfbs2" ;
 #^   dcterms:description "Spo0A binds to tfbs2" .
 'Spo0A-As2' A(s2),Spo0A(RR~p,DNAb) -> A(s2!1), Spo0A(RR~p,DNAb!1) @ 'k10'
 
 #^ :As1-Spo0A a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180 ;
 #^   dcterms:title "Spo0A unbinding from tfbs1" ;
 #^   dcterms:description "Spo0A unbinds from tfbs1" .
 'As1-Spo0A' A(s1!1,s2),Spo0A(RR~p,DNAb!1) ->  A(s1,s2),Spo0A(RR~p,DNAb) @ 'k11'
 
 #^ :As2-Spo0A a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180 ;
 #^   dcterms:title "Spo0A unbinding from tfbs2" ;
 #^   dcterms:description "Spo0A unbinds from tfbs2" .
 'As2-Spo0A' A(s1,s2!1), Spo0A(RR~p,DNAb!1) -> A(s1,s2), Spo0A(RR~p,DNAb) @ 'k11'
 
 #^ :As1As2Spo0A_to_As2Spo0A a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180 ;
 #^   dcterms:title "Cooperative unbinding" ;
 #^   dcterms:description "Spo0A unbinds from tfbs1 while remains bound to tfbs2" .
 'As1As2Spo0A_to_As2Spo0A' A(s1!1,s2!2), Spo0A(RR~p,DNAb!1), Spo0A(RR~p,DNAb!2) ->  A(s1,s2!2), Spo0A(RR~p,DNAb), Spo0A(RR~p,DNAb!2) @ 'comb_u'
 
 #^ :As1As2Spo0A_to_As1Spo0A a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000180 ;
 #^   dcterms:title "Cooperative unbinding" ;
 #^   dcterms:description "Spo0A unbinds from tfbs2 while remains bound to tfbs1" .
 'As1As2Spo0A_to_As1Spo0A'  A(s1!1,s2!2), Spo0A(RR~p,DNAb!1), Spo0A(RR~p,DNAb!2) -> A(s1!1,s2), Spo0A(RR~p,DNAb!1), Spo0A(RR~p,DNAb) @ 'comb_u'
  
 #^ :transcription a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0009299 ;
 #^   bqbiol:isVersionOf go:SBO:0000183 ;
 #^   dcterms:title "Transcription" ;
@@ -186,6 +206,7 @@
 'transcription' A(s1,s2) -> A(s1,s2), M() @'k1'
 
 #^ :translation a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0006412 ;
 #^   bqbiol:isVersionOf go:SBO:0000184 ;
 #^   dcterms:title "Translation" ;
@@ -193,115 +214,135 @@
 'translation' M() -> M(), P() @ 'k7'
 
 #^ :p_degradation a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0009056 ;
 #^   dcterms:title "Protein degradation" ;
 #^   dcterms:description "Protein degradation" .
 'p_degradation' P() -> @ 'k3'
 
 #^ :m_degradation a rbmo:Rule ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0009056 ;
 #^   dcterms:title "mrna degradation" ;
 #^   dcterms:description "mrna degradation" .
 'm_degradation' M() -> @ 'k2'
 
-#^ :kk_p a sbo:SBO:0000002 ;
+#^ :kk_p a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000153 ;
 #^   dcterms:title " kk_p" ;
 #^   dcterms:description "phosphorylation rate" .
 %var: 'kk_p' 0.1
 
-#^ :k_spo0a_KinA a sbo:SBO:0000002 ;
+#^ :k_spo0a_KinA a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000153;
 #^   dcterms:title "spo0a-KinA br" ;
 #^   dcterms:description "spo0a-KinA binding rate" .
 %var: 'k_spo0a_KinA' 0.05 
 
-#^ :k_spo0a_KinA_off a sbo:SBO:0000002 ;
+#^ :k_spo0a_KinA_off a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "spo0a(u)-KinA ur" ;
 #^   dcterms:description "spo0a(u)-KinA unbinding rate" .
 %var: 'k_spo0a_KinA_off'  2 
 
-#^ :k_spo0a_KinAp_off a sbo:SBO:0000002 ;
+#^ :k_spo0a_KinAp_off a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "spo0a(p)-KinA ur" ;
 #^   dcterms:description "spo0a(p)-KinA unbinding rate" .
 %var: 'k_spo0a_KinAp_off' 2
 
-#^ :k_KinAtospo0a a sbo:SBO:0000002 ;
+#^ :k_KinAtospo0a a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000153 ;
 #^   dcterms:title "KinA pr" ;
 #^   dcterms:description "KinA phosphorylation rate" .
 %var: 'k_KinAtospo0a' 0.1
 
-#^ :k_spo0atoKinA a sbo:SBO:0000002 ;
+#^ :k_spo0atoKinA a rbmo:Expression, sbo:SBO:0000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "spo0a_bound_ ur" ;
 #^   dcterms:description "spo0a unphosphorylation rate when bound to DNA" .
 %var: 'k_spo0atoKinA' 0.1 
 
-#^ :k_spo0ap_depho a sbo:SBO:00000002 ;
+#^ :k_spo0ap_depho a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "spo0a_unbound_ur" ;
 #^   dcterms:description "spo0a unphosphorylation rate when not bound to DNA" . 
 %var: 'k_spo0ap_depho' 0.001
 
-#^ :c a sbo:SBO:00000002 ;
+#^ :c a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "cooperativity_u" ;
 #^   dcterms:description "cooperativity coefficient for unbinding" .
 %var: 'c' 1
 
-#^ :k1 a sbo:SBO:00000002 ;
+#^ :k1 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000186 ;
 #^   dcterms:title "transcription_r" ;
 #^   dcterms:description "transcription rate" .
 %var: 'k1'  2 
 
-#^ :k2 a sbo:SBO:00000002 ;
+#^ :k2 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000331 ;
 #^   dcterms:title "mrna_d_r" ;
 #^   dcterms:description "mrna degradation rate" . 
 %var: 'k2'  0.005
 
-#^ :k3 a sbo:SBO:00000002 ;
+#^ :k3 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000331 ;
 #^   dcterms:title "protein_d_r" ;
 #^   dcterms:description "protein degradation rate" .
 %var: 'k3'  0.0005
 
-#^ :k7 a sbo:SBO:00000002 ;
+#^ :k7 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000044 ;
 #^   dcterms:title "translation" ;
 #^   dcterms:description "translation rate" .
 %var: 'k7'  0.06
 
-#^ :k10 a sbo:SBO:00000002 ;
+#^ :k10 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000153 ;
 #^   dcterms:title "binding_r" ;
 #^   dcterms:description "binding rate to the operator" .
 %var: 'k10' 0.1
 
-#^ :k11 a sbo:SBO:00000002 ;
+#^ :k11 a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "unbinding_r" ;
 #^   dcterms:description "unbinding rate from the operator" .
 %var: 'k11' 'k10'*6
 
-#^ :comb_u a sbo:SBO:00000002 ;
+#^ :comb_u a rbmo:Expression, sbo:SBO:00000002 ;
+#^   dcterms:isPartOf :model ;
 #^   bqbiol:isVersionOf sbo:SBO:0000156 ;
 #^   dcterms:title "cooperative_unbinding_r" ;
 #^   dcterms:description "cooperative unbinding rate from the operator" .
 %var: 'comb_u' 'k11'*'c'
 
-#^ :FreeProm a rbmo:Configuration  .
+#^ :FreeProm a rbmo:Observable ;
+#^   dcterms:isPartOf :model .
 %obs: 'FreeProm'  A(s1,s2)
 
-#^ :Spo0A_p a rbmo:Configuration ;
+#^ :Spo0A_p a rbmo:Observable ;
+#^   dcterms:isPartOf :model ;
 #^   ro:has_function go:GO:0045893 .
 %obs: 'Spo0A_p'  Spo0A(RR~p,DNAb)
 
-#^ :protein a rbmo:Configuration .
+#^ :protein a rbmo:Observable ;
+#^   dcterms:isPartOf :model .
 %obs: 'protein'  P()
 
 

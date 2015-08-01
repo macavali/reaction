@@ -58,7 +58,9 @@ rapper -i turtle -o turtle tmp.ttl > tcs.ttl || error "Error prettifying output 
 
 rapper -i turtle -o rdfxml test.ttl > test.rdf || error "Error converting ttl to rdf"
 
-java -jar ${HERMIT} -PU test.rdf || error "Error running HermiT"
+java -jar ${HERMIT} -v2 -PU test.rdf > unsatisfiable.txt || error "Error running HermiT"
+
+cat unsatisfiable.txt
 
 exit 0
 
