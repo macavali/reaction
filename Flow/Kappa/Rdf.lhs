@@ -57,37 +57,33 @@ ruleToRDF Rule { desc, lhs, rhs } g = rhsg
     nrule     = lname g desc  -- rdf resource for the rule name
     brule     = newBnode g "rule" -- bnode as base for bindings
     nrate     = newBnode g "rate" -- bnode for rate
-    nlhs      = newBnode g "lhs"  -- bnode for lhs
-    nrhs      = newBnode g "rhs"  -- bnode for rhs
     (alhs, _) = lhs -- a half-rule contains agents and tokens
     (arhs, _) = rhs -- ditto
     -- the top level statements about the rule. minimally, its
     -- type, and linkage for rate expression and lhs, rhs parts
     triples   = [ arc nrule RDF.resRdfType (Res rbmoRule)
                 , arc nrule (Res rbmoRate) nrate
-                , arc nrule (Res rbmoLhs) nlhs
-                , arc nrule (Res rbmoRhs) nrhs
                 ]
     ruleg     = foldl raddArc g triples
-    lhsg      = agentPats alhs brule nlhs ruleg
-    rhsg      = agentPats arhs brule nrhs lhsg
+    lhsg      = agentPats alhs brule nrule (Res rbmoLhs) ruleg
+    rhsg      = agentPats arhs brule nrule (Res rbmoRhs) lhsg
 
 -- | Simple tail-recursive utility to iterate through agent patterns
-agentPats :: [AgentP] -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
-agentPats (ap:as) b a g = agentPatToRDF ap b a nextg
-  where nextg = agentPats as b a g
-agentPats []      _ _ g = g
+agentPats :: [AgentP] -> RDFLabel -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
+agentPats (ap:as) b r p g = agentPatToRDF ap b r p nextg
+  where nextg = agentPats as b r p g
+agentPats []      _ _ _ g = g
 
 -- | Produce RDF statements about an agent pattern
 -- | The arguments are, the agent itself, a base blank node
 -- | from which bindings are to be generated, the anchor
 -- | referring to the rule's right/left side, and the graph.
-agentPatToRDF :: AgentP -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
-agentPatToRDF (AgentP name sites) b anchor g = siteg
+agentPatToRDF :: AgentP -> RDFLabel -> RDFLabel -> RDFLabel -> RDFGraph -> RDFGraph
+agentPatToRDF (AgentP name sites) b r p g = siteg
   where
     npat    = newBnode g "pat"
-    triples = [ arc anchor (Res rbmoPatP) npat
-              , arc npat (Res rbmoAgentP) (lname g name)
+    triples = [ arc r p npat
+              , arc npat (Res rbmoConfigurationOf) (lname g name)
               ]
     ag      = foldl raddArc g triples
     siteg   = sitePats (H.toList sites) b npat ag

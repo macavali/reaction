@@ -8,7 +8,6 @@ module Flow.Kappa.Vocabulary (
   , rbmoRate
   , rbmoLhs
   , rbmoRhs
-  , rbmoPatP
   , rbmoAgent
   , rbmoAgentP
   , rbmoSite
@@ -17,6 +16,9 @@ module Flow.Kappa.Vocabulary (
   , rbmoIntP
   , rbmoNothing
   , rbmoUnknown
+  , rbmoHasSite
+  , rbmoHasConfiguration
+  , rbmoConfigurationOf
   ) where
 
 import Data.Maybe(fromMaybe)
@@ -59,9 +61,6 @@ rbmoLhs = toR "lhs"
 rbmoRhs :: ScopedName
 rbmoRhs = toR "rhs"
 
-rbmoPatP :: ScopedName
-rbmoPatP = toR "pattern"
-
 rbmoAgentP :: ScopedName
 rbmoAgentP = toR "agent"
 
@@ -85,6 +84,15 @@ rbmoNothing = toR "nothing"
 
 rbmoUnknown :: ScopedName
 rbmoUnknown = toR "unknown"
+
+rbmoHasSite :: ScopedName
+rbmoHasSite = toR "hasSite"
+
+rbmoHasConfiguration :: ScopedName
+rbmoHasConfiguration = toR "hasConfiguration"
+
+rbmoConfigurationOf :: ScopedName
+rbmoConfigurationOf = toR "configurationOf"
 \end{code}
 
 % Local Variables:
