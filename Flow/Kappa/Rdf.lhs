@@ -118,8 +118,8 @@ sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
     iState (State s) =
       [ arc nsite (Res rbmoIntP) (toRDFLabel $ unpack s) ]
     iState _    = []
-    triples = [ arc anchor (Res rbmoSiteP) nsite
-              , arc nsite (Res dctidentifier) (lname g name)
+    triples = [ arc anchor (Res rbmoHasState) nsite
+              , arc nsite (Res rbmoStateOf) (lname g name)
               ] ++ linkState link ++ iState state
     siteg = foldl raddArc g triples
 sitePatToRDF _ _ _ _ = undefined

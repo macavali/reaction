@@ -11,36 +11,30 @@ SELECT DISTINCT ?rule ?contact_agent ?contact_site WHERE {
    ## the left hand side of a rule has an agent 
    ## with a site bound to nothing
    ?rule rbmo:lhs [
-       rbmo:pattern [
-           rbmo:agent ?agent;
-           rbmo:site [
-              rbmo:binding rbmo:nothing;
-              dct:identifier ?site
-           ]
+       rbmo:configurationOf ?agent;
+       rbmo:hasState [
+          rbmo:binding rbmo:nothing;
+          rbmo:stateOf ?site
        ]
    ] .
 
    ## the right hand side of a rule has the same
    ## agent with the site bound to something.
    ?rule rbmo:rhs [
-       rbmo:pattern [
-           rbmo:agent ?agent;
-           rbmo:site [
-              rbmo:binding ?binding;
-              dct:identifier ?site
-           ]
+       rbmo:configurationOf ?agent;
+       rbmo:hasState [
+          rbmo:binding ?binding;
+          rbmo:stateOf ?site
        ]
    ] .
 
    ## now we find the agents, and sites on the right hand 
    ## side who have become bound
    ?rule rbmo:rhs [
-       rbmo:pattern [
-           rbmo:agent ?contact_agent;
-           rbmo:site [
-               rbmo:binding ?binding;
-               dct:identifier ?contact_site;
-           ]
+       rbmo:configurationOf ?contact_agent;
+       rbmo:hasState [
+           rbmo:binding ?binding;
+           rbmo:stateOf ?contact_site;
        ]
    ] .
 

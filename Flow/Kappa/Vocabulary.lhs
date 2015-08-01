@@ -16,7 +16,10 @@ module Flow.Kappa.Vocabulary (
   , rbmoIntP
   , rbmoNothing
   , rbmoUnknown
+  , rbmoHasState
+  , rbmoStateOf
   , rbmoHasSite
+  , rbmoSiteOf
   , rbmoHasConfiguration
   , rbmoConfigurationOf
   ) where
@@ -87,6 +90,15 @@ rbmoUnknown = toR "unknown"
 
 rbmoHasSite :: ScopedName
 rbmoHasSite = toR "hasSite"
+
+rbmoSiteOf :: ScopedName
+rbmoSiteOf = toR "siteOf"
+
+rbmoHasState :: ScopedName
+rbmoHasState = toR "hasState"
+
+rbmoStateOf :: ScopedName
+rbmoStateOf = toR "stateOf"
 
 rbmoHasConfiguration :: ScopedName
 rbmoHasConfiguration = toR "hasConfiguration"
