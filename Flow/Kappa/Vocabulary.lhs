@@ -8,14 +8,11 @@ module Flow.Kappa.Vocabulary (
   , rbmoRate
   , rbmoLhs
   , rbmoRhs
-  , rbmoPat
   , rbmoPatP
   , rbmoAgent
   , rbmoAgentP
   , rbmoSite
   , rbmoSiteP
-  , rbmoState
-  , rbmoStateP
   , rbmoBindingP
   , rbmoIntP
   , rbmoNothing
@@ -65,9 +62,6 @@ rbmoRhs = toR "rhs"
 rbmoPatP :: ScopedName
 rbmoPatP = toR "pattern"
 
-rbmoPat :: ScopedName
-rbmoPat = toR "Pattern"
-
 rbmoAgentP :: ScopedName
 rbmoAgentP = toR "agent"
 
@@ -79,12 +73,6 @@ rbmoSiteP = toR "site"
 
 rbmoSite :: ScopedName
 rbmoSite = toR "Site"
-
-rbmoStateP :: ScopedName
-rbmoStateP = toR "state"
-
-rbmoState :: ScopedName
-rbmoState = toR "State"
 
 rbmoBindingP :: ScopedName
 rbmoBindingP = toR "binding"

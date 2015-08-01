@@ -87,7 +87,6 @@ agentPatToRDF (AgentP name sites) b anchor g = siteg
   where
     npat    = newBnode g "pat"
     triples = [ arc anchor (Res rbmoPatP) npat
-              , arc npat RDF.resRdfType (Res rbmoPat)
               , arc npat (Res rbmoAgentP) (lname g name)
               ]
     ag      = foldl raddArc g triples
@@ -124,7 +123,6 @@ sitePatToRDF (name, (link, state)) (Blank b) anchor g = siteg
       [ arc nsite (Res rbmoIntP) (toRDFLabel $ unpack s) ]
     iState _    = []
     triples = [ arc anchor (Res rbmoSiteP) nsite
-              , arc nsite RDF.resRdfType (Res rbmoState)
               , arc nsite (Res dctidentifier) (lname g name)
               ] ++ linkState link ++ iState state
     siteg = foldl raddArc g triples
