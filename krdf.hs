@@ -7,9 +7,12 @@ import Flow.Kappa.Rdf
 import Options.Applicative
 import System.IO(stdout)
 import Swish.RDF(RDFGraph, emptyRDFGraph, getNamespaces, setNamespaces)
-import Swish.RDF.Formatter.Turtle(formatGraphAsText)
+import qualified Swish.RDF.Formatter.Turtle as Turtle
+import qualified Swish.RDF.Formatter.NTriples as NTriples
+import qualified Swish.RDF.Formatter.N3 as N3
 
 data Config = Cfg { filename :: String
+                  , format   :: String
                   , doAnnotate    :: Bool
                   , doMaterialise :: Bool
                   , doNormalise   :: Bool
@@ -21,6 +24,12 @@ args = Cfg
          <> long "filename"
          <> metavar "FILENAME"
          <> help "Kappa file to read" )
+       <*> strOption
+       ( short 'o'
+         <> long "output"
+         <> value "turtle"
+         <> metavar "FORMAT"
+         <> help "Output format: turtle, nt, n3 (default turtle)" )
        <*> switch
        ( short 'a'
          <> long "annotations"
@@ -55,7 +64,13 @@ genRdf cfg kappa = materialised
 readKappaWriteRDF :: Config -> IO ()
 readKappaWriteRDF cfg = do
   input <- readFile $ filename cfg
-  hPutStr stdout $ formatGraphAsText $ genRdf cfg $ parseKappa input
+  hPutStr stdout $ fmt $ genRdf cfg $ parseKappa input
+  where
+    fmt = case format cfg of
+      "turtle" -> Turtle.formatGraphAsText
+      "n3"     -> N3.formatGraphAsText
+      "nt"     -> NTriples.formatGraphAsText
+      f        -> error $ "Unknown output format '" ++ f ++ "'"
 
 main :: IO ()
 main = do
