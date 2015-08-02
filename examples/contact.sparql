@@ -6,7 +6,8 @@
 ##
 ##    krdf -f examples/tcs.kappa -a -m -n | \
 ##        roqet -D - -r turtle examples/contact.sparql : | \
-##        rapper -i turtle -o dot - examples/tcs.kappa \
+##        rapper -i turtle -o dot - examples/tcs.kappa | \
+##        sed -e 's/^digraph/graph/' -e 's/->/--/' \
 ##      > contact.dot
 ##    dot -Teps -o contact.eps contact.dot
 ##
