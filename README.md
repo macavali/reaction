@@ -77,12 +77,12 @@ pattern of the output in order to write queries against it.
 Using [roqet](http://librdf.org/) it is possible to run queries
 in the [SPARQL](http://www.w3.org/TR/sparql11-query/) language
 angainst the RDF graph produced by `krdf`. The
-`examples/contact.sparql` file contains a query to extract the
-contact graph -- which agents and sites become bound under a
-particular rule. An example command line is,
+`examples/binding.sparql` file contains a query to extract the
+forward part of the contact graph -- which agents and sites become
+bound under a particular rule. An example command line is,
 ```
 krdf -f examples/tcs.kappa -a -m -n | \
-    roqet -D - -r table examples/contact.sparql
+    roqet -D - -r table examples/binding.sparql
 ```
 [roqet](http://librdf.org) can produce output in a variety of
 machine-readable formats (json, xml, csv) as well as some human
