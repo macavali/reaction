@@ -1,44 +1,149 @@
 ##
-## Extracts a simple contact graph from the RDF representation
-## of Kappa rules
+## SPARQL query to extract a simple contact graph from the RDF
+## representation of Kappa rules. This query contains some abuse of
+## the notation because it is designed to be fed directly into the
+## GraphViz dot program. It is used like so:
+##
+##    krdf -f examples/tcs.kappa -a -m -n | \
+##        roqet -D - -r turtle examples/contact.sparql : | \
+##        rapper -i turtle -o dot - examples/tcs.kappa \
+##      > contact.dot
+##    dot -Teps -o contact.eps contact.dot
+##
+## The simple ":" base URI for the roqet(1) command like arranges so
+## that the names of agents appear without prefix in the diagram. The
+## intermediate invocation of rapper(1) is necessary because roqet(1)
+## can output erroneous dot files in some circumstances, duplicating
+## edges.
 ##
 
 PREFIX rbmo: <http://purl.org/rbm/rbmo/>
 
-SELECT DISTINCT ?rule ?contact_agent ?contact_site WHERE {
+CONSTRUCT {
+  ## This use of bare tokens in place of URIs is to arrange
+  ## for simple labels on edges.
+  ?aA <site> ?A .
+  ?aB <site> ?B .
+  ?A ?p ?B
+} WHERE {
 
-   ## the left hand side of a rule has an agent 
-   ## with a site bound to nothing
-   ?rule rbmo:lhs [
-       rbmo:agent ?agent;
-       rbmo:state [
-          rbmo:binding rbmo:Nothing;
-          rbmo:site ?site
-       ]
-   ] .
+   ##
+   ## The first half of a UNION block. Extract the forward,
+   ## binding, contact map.
+   ##
 
-   ## the right hand side of a rule has the same
-   ## agent with the site bound to something.
-   ?rule rbmo:rhs [
-       rbmo:agent ?agent;
-       rbmo:state [
-          rbmo:binding ?binding;
-          rbmo:site ?site
-       ]
-   ] .
+   {
+       ## the left hand side of a rule has an agent 
+       ## with a site bound to nothing
+       ?rule rbmo:lhs [
+           rbmo:agent ?agent;
+           rbmo:state [
+              rbmo:binding rbmo:Nothing;
+              rbmo:site ?site
+           ]
+       ] .
+    
+       ## the right hand side of a rule has the same
+       ## agent with the site bound to something.
+       ?rule rbmo:rhs [
+           rbmo:agent ?agent;
+           rbmo:state [
+              rbmo:binding ?binding;
+              rbmo:site ?site
+           ]
+       ] .
+    
+       ## now we find the agents, and sites on the right hand 
+       ## side who have become bound
 
-   ## now we find the agents, and sites on the right hand 
-   ## side who have become bound
-   ?rule rbmo:rhs [
-       rbmo:agent ?contact_agent;
-       rbmo:state [
-           rbmo:binding ?binding;
-           rbmo:site ?contact_site;
-       ]
-   ] .
+       ?rule rbmo:rhs [
+           rbmo:agent ?agentA;
+           rbmo:state [
+               rbmo:binding ?binding;
+               rbmo:site ?siteA;
+           ]
+       ] .
+    
+       ?rule rbmo:rhs [
+           rbmo:agent ?agentB;
+           rbmo:state [
+               rbmo:binding ?binding;
+               rbmo:site ?siteB;
+           ]
+       ] .
+
+       ## Apply a predictable ordering on the sites so that
+       ## edges do not appear twice.
+       FILTER (STR(?siteA) < STR(?siteB))
+
+       ## This is the same as with <site> to make a neat 
+       ## edge label
+       BIND (<binding> AS ?p)
+
+   } UNION {
+
+   ##
+   ## The second half of the UNION does the opposite and extracts
+   ## unbinding rules
+   ##
+      
+       ## the right hand side of a rule has an agent 
+       ## with a site bound to nothing
+       ?rule rbmo:rhs [
+           rbmo:agent ?agent;
+           rbmo:state [
+              rbmo:binding rbmo:Nothing;
+              rbmo:site ?site
+           ]
+       ] .
+    
+       ## the left hand side of a rule has the same
+       ## agent with the site bound to something.
+       ?rule rbmo:lhs [
+           rbmo:agent ?agent;
+           rbmo:state [
+              rbmo:binding ?binding;
+              rbmo:site ?site
+           ]
+       ] .
+    
+       ## now we find the agents, and sites on the left hand 
+       ## side who have become unbound
+
+       ?rule rbmo:lhs [
+           rbmo:agent ?agentA;
+           rbmo:state [
+               rbmo:binding ?binding;
+               rbmo:site ?siteA;
+           ]
+       ] .
+    
+       ?rule rbmo:lhs [
+           rbmo:agent ?agentB;
+           rbmo:state [
+               rbmo:binding ?binding;
+               rbmo:site ?siteB;
+           ]
+       ] .
+
+       ## As above, apply a predictable order
+       FILTER (STR(?siteA) > STR(?siteB))
+
+       ## and arrange for a neat edge label.
+       BIND (<unbinding> AS ?p)
+   }
 
    ## this filter is necessary to check that the binding
    ## actually is one, that is blank nodes are used to
    ## bind sites
    FILTER isBlank(?binding)
+
+   ## Rewrite the URIs that we found above so that they
+   ## appear neatly on the diagram. A real program for
+   ## generating diagrams from the RDF would leave these
+   ## intact and extract the rdfs:labels instead.
+   BIND (URI(STRAFTER(STR(?siteA), "#")) as ?A)
+   BIND (URI(STRAFTER(STR(?siteB), "#")) as ?B)
+   BIND (URI(STRAFTER(STR(?agentA), "#")) as ?aA)
+   BIND (URI(STRAFTER(STR(?agentB), "#")) as ?aB)
 }
