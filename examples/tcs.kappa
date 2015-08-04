@@ -38,9 +38,9 @@
 #^   rbmo:hasState :KinA:H405:p ;
 #^   bqbiol:isVersionOf ipr:IPR009082 .
 #^ :KinA:H405:u	a rbmo:State ;
-#^   rbmo:stateAssignment pr:PR:000026291 .
+#^   bqbiol:is pr:PR:000026291 .
 #^ :KinA:H405:p	a rbmo:State ;
-#^   rbmo:stateAssignment psimod:MOD:00696 .
+#^   bqbiol:is psimod:MOD:00696 .
 %agent: KinA(H405~u~p)
 
 #^ :Spo0A a rbmo:Agent ;
@@ -54,9 +54,9 @@
 #^   rbmo:hasState :Spo0A:RR:p ;
 #^   bqbiol:isVersionOf ipr:IPR001789 .
 #^ :Spo0A:RR:u a rbmo:State;
-#^   rbmo:stateAssignment pr:PR:000026291 .
+#^   bqbiol:is pr:PR:000026291 .
 #^ :Spo0A:RR:p a rbmo:State;
-#^   rbmo:stateAssignment psimod:MOD:00696 .
+#^   bqbiol:is psimod:MOD:00696 .
 #^ :Spo0A:DNAb a rbmo:Site ;
 #^   bqbiol:isVersionOf ipr:IPR011991 .
 %agent: Spo0A(RR~u~p,DNAb)
