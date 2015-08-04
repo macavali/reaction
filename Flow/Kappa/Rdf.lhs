@@ -119,8 +119,8 @@ sitePatToRDF agent (name, (link, state)) (Blank b) anchor g = siteg
       [ arc nsite (Res rbmointernal) (lname g $ istatename s) ]
     iState _    = []
     -- XXX ugly
-    sitename = pack $ (unpack agent) ++ "_" ++ (unpack name)
-    istatename s = pack $ (unpack sitename) ++ "_" ++ (unpack s)
+    sitename = pack $ (unpack agent) ++ ":" ++ (unpack name)
+    istatename s = pack $ (unpack sitename) ++ ":" ++ (unpack s)
     triples = [ arc anchor (Res rbmostate) nsite
               , arc nsite (Res rbmosite) (lname g sitename)
               ] ++ linkState link ++ iState state

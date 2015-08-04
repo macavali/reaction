@@ -24,68 +24,68 @@
 
 #^ :KinA a rbmo:Agent ;
 #^   dcterms:isPartOf :model ;
-#^   rbmo:hasSite :KinA_H405 ;
+#^   rbmo:hasSite :KinA:H405 ;
 #^   biopax:physicalEntity biopax:Protein ;
 #^   bqbiol:is uniprot:P16497 ;
 #^   ro:has_function go:GO:0000155 .
 ##
-## The underscore here is significant. This convention allows
+## The internal : here is significant. This convention allows
 ## tools to make the link between the Kappa syntax and the
 ## URI for the site. And similarly for states.
 ##
-#^ :KinA_H405 a rbmo:Site ;
-#^   rbmo:hasState :KinA_H405_u ;
-#^   rbmo:hasState :KinA_H405_p ;
+#^ :KinA:H405 a rbmo:Site ;
+#^   rbmo:hasState :KinA:H405:u ;
+#^   rbmo:hasState :KinA:H405:p ;
 #^   bqbiol:isVersionOf ipr:IPR009082 .
-#^ :KinA_H405_u	a rbmo:State ;
-#^   rbmo:stateAssignment pr:PR:000026291 .
-#^ :KinA_H405_p	a rbmo:State ;
-#^   rbmo:stateAssignment psimod:MOD:00696 .
+#^ :KinA:H405:u	a rbmo:State ;
+#^   bqbiol:is pr:PR:000026291 .
+#^ :KinA:H405:p	a rbmo:State ;
+#^   bqbiol:is psimod:MOD:00696 .
 %agent: KinA(H405~u~p)
 
 #^ :Spo0A a rbmo:Agent ;
 #^   dcterms:isPartOf :model ;
-#^   rbmo:hasSite :Spo0A_RR  ;
+#^   rbmo:hasSite :Spo0A:RR  ;
 #^   bqbiol:is uniprot:P06534 ;
 #^   biopax:physicalEntity biopax:Protein ;
 #^   ro:has_function go:GO:0000156 .
-#^ :Spo0A_RR a rbmo:Site ;
-#^   rbmo:hasState :Spo0A_RR:u ;
-#^   rbmo:hasState :Spo0A_RR_p ;
+#^ :Spo0A:RR a rbmo:Site ;
+#^   rbmo:hasState :Spo0A:RR:u ;
+#^   rbmo:hasState :Spo0A:RR:p ;
 #^   bqbiol:isVersionOf ipr:IPR001789 .
-#^ :Spo0A_RR_u a rbmo:State;
-#^   rbmo:stateAssignment pr:PR:000026291 .
-#^ :Spo0A_RR_p a rbmo:State;
-#^   rbmo:stateAssignment psimod:MOD:00696 .
-#^ :Spo0A_DNAb a rbmo:Site ;
+#^ :Spo0A:RR:u a rbmo:State;
+#^   bqbiol:is pr:PR:000026291 .
+#^ :Spo0A:RR:p a rbmo:State;
+#^   bqbiol:is psimod:MOD:00696 .
+#^ :Spo0A:DNAb a rbmo:Site ;
 #^   bqbiol:isVersionOf ipr:IPR011991 .
 %agent: Spo0A(RR~u~p,DNAb)
 
 #^ :A a rbmo:Agent ; 
 #^   dcterms:isPartOf :model ;
-#^   rbmo:hasSite :A_s1 ;
-#^   rbmo:hasSite :A_s2 ;
+#^   rbmo:hasSite :A:s1 ;
+#^   rbmo:hasSite :A:s2 ;
 #^   bqbiol:isVersionOf so:SO:0000167 ;
 #^   biopax:physicalEntity biopax:DnaRegion ;
 #^   sbol:nucleotides "TTGATCCCTCTTCACTTCTCAGAATACATACGGTAAAATATACAAAAGAAGATTTTTCGACAAATTCACGTTTCCTTGTTTGTCAAATTTCATTTTTAGTCGAAAAACAGAGAAAAACAT" ;
 #^   sbol:componentType so:SO:0000167 ;
-#^   sbol:annotation :s1_location ;	
-#^   sbol:annotation :s2_location .	
-#^ :A_s1 a rbmo:Site ;
+#^   sbol:annotation :A:s1_location ;	
+#^   sbol:annotation :A:s2_location .	
+#^ :A:s1 a rbmo:Site ;
 #^   bqbiol:isVersionOf so:SO_0000057 ;
 #^   biopax:physicalEntity biopax:DnaRegion ;
 #^   sbol:nucleotides "TTCGACA" ;
 #^   sbol:componentType so:SO:0000057 .
-#^ :A_s2 a rbmo:Site ;
+#^ :A:s2 a rbmo:Site ;
 #^   bqbiol:isVersionOf so:SO:0000057 ;
 #^   biopax:physicalEntity biopax:DnaRegion;
 #^   sbol:nucleotides "AGTCGAA" ;
 #^   sbol:componentType so:SO:0000057 .
-#^ :s1_location a sbol:SequenceAnnotation ;
+#^ :A:s1_location a sbol:SequenceAnnotation ;
 #^   sbol:bioStart 56;
 #^   sbol:bioEnd 62 ;
 #^   sbol:component :A_s1 .  
-#^ :s2_location a sbol:SequenceAnnotation ;
+#^ :A:s2_location a sbol:SequenceAnnotation ;
 #^   sbol:bioStart 98;
 #^   sbol:bioEnd 104 ;
 #^   sbol:component :A_s2 . 
