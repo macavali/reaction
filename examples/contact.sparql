@@ -15,7 +15,8 @@
 ## that the names of agents appear without prefix in the diagram. The
 ## intermediate invocation of rapper(1) is necessary because roqet(1)
 ## can output erroneous dot files in some circumstances, duplicating
-## edges.
+## edges. The sed(1) command is to transform the resulting directed
+## graph into an undirected one.
 ##
 
 PREFIX rbmo: <http://purl.org/rbm/rbmo/>
