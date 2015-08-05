@@ -69,4 +69,4 @@ rdf:nil a rdf:List.
 
 ### inconsistency detections @@
 
-{?S a rdf:XMLLiteral; e:clashesWith rdf:XMLLiteral} => false.
+#{?S a rdf:XMLLiteral; e:clashesWith rdf:XMLLiteral} => false.

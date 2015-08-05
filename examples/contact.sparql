@@ -19,7 +19,7 @@
 ## graph into an undirected one.
 ##
 
-PREFIX rbmo: <http://purl.org/rbm/rbmo/>
+PREFIX rbmo: <http://purl.org/rbm/rbmo#>
 
 CONSTRUCT {
   ## This use of bare tokens in place of URIs is to arrange

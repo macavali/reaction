@@ -24,7 +24,7 @@ def binding(g):
     that correspond to binding operations.
     """
     query = """
-PREFIX rbmo: <http://purl.org/rbm/rbmo/>
+PREFIX rbmo: <http://purl.org/rbm/rbmo#>
 
 SELECT DISTINCT ?rule ?agentA ?siteA ?agentB ?siteB
 WHERE {
@@ -87,7 +87,7 @@ def unbinding(g):
     that correspond to unbinding operations.
     """
     query = """
-PREFIX rbmo: <http://purl.org/rbm/rbmo/>
+PREFIX rbmo: <http://purl.org/rbm/rbmo#>
 
 SELECT DISTINCT ?rule ?agentA ?siteA ?agentB ?siteB
 WHERE {

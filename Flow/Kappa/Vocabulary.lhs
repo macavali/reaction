@@ -57,9 +57,9 @@ import Swish.QName (LName)
 
 rbmoURI :: URI
 rbmoURI = fromMaybe (error "Internal error processing RBMO URI") $ parseURI
-         "http://purl.org/rbm/rbmo/"
+         "http://purl.org/rbm/rbmo#"
 
--- | Maps @rbmo@ to <http://purl.org/rbm/rbmo/>
+-- | Maps @rbmo@ to <http://purl.org/rbm/rbmo#>
 namespaceRBMO :: Namespace
 namespaceRBMO = makeNamespace (Just "rbmo") rbmoURI
 
