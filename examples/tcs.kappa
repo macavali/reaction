@@ -179,7 +179,7 @@
 #^ :Spo0A-As2 a rbmo:Rule ;
 #^   dct:isPartOf :model ;
 #^   bqbiol:isVersionOf go:GO:0008134 ;
-#^   dct:title "Spo0A binding to Operator 1" ;
+#^   dct:title "Spo0A binding to Operator 2" ;
 #^   dct:description "Phosphorylated Response Regulator binds to to the Transcription Binding Site 1" .
 'Spo0A-As2' A(s2),Spo0A(RR~p,DNAb) -> A(s2!1), Spo0A(RR~p,DNAb!1) @ 'k10'
 
