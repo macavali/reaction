@@ -1,20 +1,28 @@
 #!/usr/bin/env python
 
+#####################
+##
+## Version of Contact Map generator that uses the Redland (librdf)
+## python bindings
+##
+#####################
+
 import sys
 import os
 import argparse
 
 try:
-    import rdflib
+    import RDF
 except ImportError:
-    print 'This program requires rdflib. Do "pip install rdflib"'
+    print 'This program requires the redland python bindings'
     sys.exit(1)
 
-try:
-    assert "sparql" in [p.name for p in rdflib.plugin.plugins()]
-except ImportError:
-    print 'This program requires rdflib-sparql. Do "pip install rdflib-sparql"'
-    sys.exit(1)
+def sparql(g, query):
+    q = RDF.Query(query)
+    return q.execute(g)
+
+def n3(u):
+    return "<%s>" % u
 
 def binding(g):
     """
@@ -74,7 +82,8 @@ WHERE {
     FILTER (STR(?siteA) < STR(?siteB))
 }
 """
-    return g.query(query)
+    for r in sparql(g, query):
+        yield (r["rule"], r["agentA"], r["siteA"], r["agentB"], r["siteB"])
 
 def unbinding(g):
     """
@@ -134,7 +143,8 @@ WHERE {
     FILTER (STR(?siteA) < STR(?siteB))
 }
 """
-    return g.query(query)
+    for r in sparql(g, query):
+        yield (r["rule"], r["agentA"], r["siteA"], r["agentB"], r["siteB"])
 
 def rewrite(u):
     """
@@ -163,7 +173,7 @@ def external(g):
 PREFIX bqbiol: <http://biomodels.net/biology-qualifiers/>
 SELECT DISTINCT ?res WHERE { ?something bqbiol:is ?res }
 """
-    resources = [r for r, in g.query(query)]
+    resources = [r for r, in sparql(g, query)]
     for r in resources:
         r = rewrite(str(r))
         sys.stderr.write("Loading %s... " % r)
@@ -208,8 +218,9 @@ SELECT DISTINCT ?tides WHERE { %s sbol:nucleotides ?tides }
 """
 ]
     for q in queries:
-        for result in g.query(q % r.n3()):
-            return result[0]
+        for result in sparql(g, q % n3(r)):
+            for k in result:
+                return str(result[k])
     return slug(r).rsplit(":", 1)[-1]
 
 def typeof(g, r):
@@ -224,8 +235,9 @@ SELECT DISTINCT ?t
 WHERE { %s biopax:physicalEntity ?t }
 """]
     for q in queries:
-        for result in g.query(q % r.n3()):
-            return result[0]
+        for result in sparql(g, q % n3(r)):
+            for k in result:
+                return str(result[k])
     return None
 
 def slug(r):
@@ -248,15 +260,32 @@ if __name__ == '__main__':
 
     if args.f == '-':
         fd = sys.stdin
+        base = "stdin:"
     else:
         fd = open(args.f, "r")
-
-    g = rdflib.Graph()
-    g.load(fd, format=args.i)
+        base = "file://" + args.f
+    data = fd.read()
     fd.close()
 
-    sys.stderr.write("Enriching graph with external resources...\n")
-    external(g)
+    storage = RDF.Storage(storage_name="hashes",
+                          name="test",
+                          options_string="new='yes',hash-type='memory',dir='.'")
+    if storage is None:
+        raise Exception("new RDF.Storage failed")
+
+    g = RDF.Model(storage)
+    if g is None:
+        raise Exception("new RDF.model failed")
+
+    parser=RDF.Parser('raptor')
+    if parser is None:
+        raise Exception("Failed to create RDF.Parser raptor")
+
+    sys.stderr.write("Parsing URI: %s" % base)
+    uri = RDF.Uri(string=base)
+
+    for s in parser.parse_string_as_stream(data, uri):
+        g.add_statement(s)
 
     agents = {}
     sites  = {}
@@ -265,6 +294,7 @@ if __name__ == '__main__':
 
     sys.stderr.write("Calculating bindings...\n")
     bindings = list(binding(g))
+
     sys.stderr.write("Calculating unbindings...\n")
     unbindings = list(unbinding(g))
 
@@ -302,7 +332,7 @@ if __name__ == '__main__':
     print "graph {"
 
     for a, sl in agent_sites.items():
-        print '    subgraph cluster_%s {' % a
+        print '    subgraph cluster_%s {' % a.replace("-", "_").replace(":", "_")
         alabel = agents[a][0]
         if agents[a][1]:
             alabel = alabel + " (%s)" % slug(agents[a][1])
