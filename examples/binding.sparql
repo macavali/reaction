@@ -3,7 +3,7 @@
 ## representation of Kappa rules
 ##
 
-PREFIX rbmo: <http://purl.org/rbm/rbmo/>
+PREFIX rbmo: <http://purl.org/rbm/rbmo#>
 
 SELECT DISTINCT ?rule ?contact_agent ?contact_site WHERE {
 

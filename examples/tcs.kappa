@@ -1,6 +1,6 @@
-#^ @prefix : <http://purl.org/rbm/rbmo/examples/TCS.kappa#>.
+#^ @prefix : <http://rbm.rww.io/rbmo-examples/tcs#>.
 #^ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-#^ @prefix rbmo: <http://purl.org/rbm/rbmo/>.
+#^ @prefix rbmo: <http://purl.org/rbm/rbmo#>.
 #^ @prefix sbol: <http://sbols.org/v1#/>.
 #^ @prefix go: <http://identifiers.org/go/>.
 #^ @prefix so: <http://identifiers.org/so/>.
@@ -17,11 +17,21 @@
 #^ @prefix bqbiol: <http://biomodels.net/biology-qualifiers/>.
 #^ @prefix biopax: <http://www.biopax.org/release/biopax-level3.owl#>.
 
+#^ <> a foaf:Document;
+#^   rdfs:label "Annotated description of TCS model" ;
+#^   rdfs:seeAlso <http://purl.org/rbm/rbmo>,
+#^                <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.kappa> ,
+#^                <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.bgnl> ;
+#^   foaf:primaryTopic :model .
+#^ <http://purl.org/rbm/rbmo> rdfs:label "RBM Ontology" .
+#^ <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.kappa> rdfs:label "Kappa version of the annotated TCS model" .
+#^ <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.bgnl> rdfs:label "BioNetGen version of the annotated TCS model" .
+
 #^ :model a rbmo:Kappa  ;
-#^  dct:title "TCS Kappa model" ;
-#^  dct:description "A Kappa moddel of a two-component system. The model represents the combination of a two-component system and a promoter architecture based on dual repression" ;
-#^  dct:creator "Goksel Misirli", "Matteo Cavaliere", "Alejandro Granados" ; 
-#^  foaf:isPrimaryTopicOf <https://purl.org/rbm/rbmo/examples/TCS.kappa> .
+#^   dct:title "TCS Kappa model" ;
+#^   dct:description "A Kappa moddel of a two-component system. The model represents the combination of a two-component system and a promoter architecture based on dual repression" ;
+#^   dct:creator "Goksel Misirli", "Matteo Cavaliere", "Alejandro Granados" ; 
+#^   foaf:isPrimaryTopicOf <>, <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.kappa> .
 
 #^ :KinA a rbmo:Agent ;
 #^   dct:isPartOf :model ;
@@ -64,7 +74,7 @@
 
 #^ :A a rbmo:Agent ; 
 #^   dct:isPartOf :model ;
-#^   rdfs:label "A" ;
+#^   dct:title "Promoter" ;
 #^   rbmo:hasSite :A:s1 ;
 #^   rbmo:hasSite :A:s2 ;
 #^   bqbiol:isVersionOf so:SO:0000167 ;
