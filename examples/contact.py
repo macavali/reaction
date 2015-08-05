@@ -72,6 +72,8 @@ WHERE {
     ## Apply a predictable ordering on the sites so that
     ## edges do not appear twice.
     FILTER (STR(?siteA) < STR(?siteB))
+
+    ORDER BY ?rule
 }
 """
     return g.query(query)
@@ -132,6 +134,8 @@ WHERE {
     ## Apply a predictable ordering on the sites so that
     ## edges do not appear twice.
     FILTER (STR(?siteA) < STR(?siteB))
+
+    ORDER BY ?rule
 }
 """
     return g.query(query)
@@ -288,8 +292,10 @@ if __name__ == '__main__':
             rules[slug(rule)] = label(g, rule)
 
     rmapfwd = {}
-    b_keys = set(slug(rule) for rule, _, _, _, _ in bindings)
-    u_keys = set(slug(rule) for rule, _, _, _, _ in unbindings)
+    b_keys = list(set(slug(rule) for rule, _, _, _, _ in bindings))
+    u_keys = list(set(slug(rule) for rule, _, _, _, _ in unbindings))
+    b_keys.sort(lambda x,y: cmp(rules[x], rules[y]))
+    u_keys.sort(lambda x,y: cmp(rules[x], rules[y]))
     rkeys = list(b_keys) + list(u_keys)
 
     for r in range(0, len(b_keys)):
