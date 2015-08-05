@@ -207,6 +207,10 @@ SELECT DISTINCT ?label WHERE { %s bqbiol:is [ rdfs:label ?label ] }
 PREFIX bqbiol: <http://biomodels.net/biology-qualifiers/>
 PREFIX dct: <http://purl.org/dc/terms/>
 SELECT DISTINCT ?label WHERE { %s bqbiol:is [ dct:title ?label ] }
+""", """
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX sbol: <http://sbols.org/v1#/>
+SELECT DISTINCT ?tides WHERE { %s sbol:nucleotides ?tides }
 """
 ]
     for q in queries:
