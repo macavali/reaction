@@ -17,7 +17,7 @@
 #^ @prefix bqbiol: <http://biomodels.net/biology-qualifiers/>.
 #^ @prefix biopax: <http://www.biopax.org/release/biopax-level3.owl#>.
 
-#^ <> a foaf:Document;
+#^ <https://rbm.rww.io/rbm-examples/tcs.bgnl> a foaf:Document;
 #^   rdfs:label "TCS model in Annotated BioNetGen" ;
 #^   rdfs:seeAlso <http://purl.org/rbm/rbmo>,
 #^                <https://rbm.rww.io/rbmo-examples/tcs.kappa> ,
