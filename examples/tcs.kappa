@@ -32,7 +32,7 @@
 #^ :model a rbmo:model  ;
 #^   dct:title "TCS Kappa model" ;
 #^   dct:description "A Kappa moddel of a two-component system. The model represents the combination of a two-component system and a promoter architecture based on dual repression" ;
-#^   dct:creator "Goksel Misirli", "Matteo Cavaliere", "Alejandro Granados" ; 
+#^   dct:creator "Goksel Misirli", "Matteo Cavaliere"; 
 #^   foaf:isPrimaryTopicOf <>, <https://github.com/edinburgh-rbm/reaction/blob/master/examples/tcs.kappa> .
 
 #^ :KinA a rbmo:Agent ;
